@@ -6,13 +6,18 @@ import { createBrowserClient } from "@supabase/ssr"
 import { AdminSidebar } from "@/components/admin/sidebar"
 import { AdminHeader } from "@/components/admin/header"
 import type { Order } from "@/lib/types"
+import { Search, X } from "lucide-react"
 
 export default function AdminOrdersPage() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [orders, setOrders] = useState<Order[]>([])
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+
+  const [searchQuery, setSearchQuery] = useState("")
+  const [timeFilter, setTimeFilter] = useState<"all" | "week" | "month" | "year">("all")
 
   useEffect(() => {
     const supabase = createBrowserClient(
@@ -46,6 +51,41 @@ export default function AdminOrdersPage() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    let filtered = [...orders]
+
+    // Apply time filter
+    if (timeFilter !== "all") {
+      const now = new Date()
+      const filterDate = new Date()
+
+      if (timeFilter === "week") {
+        filterDate.setDate(now.getDate() - 7)
+      } else if (timeFilter === "month") {
+        filterDate.setMonth(now.getMonth() - 1)
+      } else if (timeFilter === "year") {
+        filterDate.setFullYear(now.getFullYear() - 1)
+      }
+
+      filtered = filtered.filter((order) => {
+        return new Date(order.created_at) >= filterDate
+      })
+    }
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
+      filtered = filtered.filter((order) => {
+        const customerName = getCustomerName(order).toLowerCase()
+        const customerEmail = getCustomerEmail(order).toLowerCase()
+        const orderId = order.id.toLowerCase()
+        return customerName.includes(query) || customerEmail.includes(query) || orderId.includes(query)
+      })
+    }
+
+    setFilteredOrders(filtered)
+  }, [orders, searchQuery, timeFilter])
 
   if (!isAuthenticated) {
     return null
@@ -102,13 +142,87 @@ export default function AdminOrdersPage() {
             <h1 className="text-4xl font-bold text-foreground">Orders</h1>
           </div>
 
+          <div className="bg-card rounded-lg border border-border p-4 md:p-6 mb-8 space-y-4">
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search by customer name, email, or order ID..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-10 py-2 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary transition"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Time Filter Buttons */}
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setTimeFilter("all")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  timeFilter === "all"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-background border border-border text-foreground hover:border-primary"
+                }`}
+              >
+                All Orders
+              </button>
+              <button
+                onClick={() => setTimeFilter("week")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  timeFilter === "week"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-background border border-border text-foreground hover:border-primary"
+                }`}
+              >
+                Last 7 Days
+              </button>
+              <button
+                onClick={() => setTimeFilter("month")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  timeFilter === "month"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-background border border-border text-foreground hover:border-primary"
+                }`}
+              >
+                Last Month
+              </button>
+              <button
+                onClick={() => setTimeFilter("year")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  timeFilter === "year"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-background border border-border text-foreground hover:border-primary"
+                }`}
+              >
+                Last Year
+              </button>
+            </div>
+
+            {/* Filter Info */}
+            <div className="text-sm text-muted-foreground">
+              Showing {filteredOrders.length} of {orders.length} orders
+              {(searchQuery || timeFilter !== "all") && " (filtered)"}
+            </div>
+          </div>
+
           {loading ? (
             <div className="text-center py-12">Loading orders...</div>
-          ) : orders.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">No orders found yet.</div>
+          ) : filteredOrders.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground">
+              {orders.length === 0 ? "No orders found yet." : "No orders match your filters."}
+            </div>
           ) : (
             <div className="grid grid-cols-1 gap-6">
-              {orders.map((order) => (
+              {filteredOrders.map((order) => (
                 <div
                   key={order.id}
                   className="bg-card rounded-lg border border-border p-6 hover:border-primary transition cursor-pointer"

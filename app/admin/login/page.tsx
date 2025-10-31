@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Eye, EyeOff, Heart } from "lucide-react"
+import { Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { createBrowserClient } from "@supabase/ssr"
 import { useToast } from "@/hooks/use-toast"
@@ -29,6 +29,29 @@ export default function AdminLoginPage() {
     setLoading(true)
 
     try {
+      const verifyResponse = await fetch("/api/admin/verify-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const verifyData = await verifyResponse.json()
+
+      if (!verifyResponse.ok) {
+        const errorMessage = verifyData.error || "Login failed"
+        setError(errorMessage)
+        toast({
+          title: "Login Failed",
+          description: errorMessage,
+          variant: "destructive",
+        })
+        setLoading(false)
+        return
+      }
+
+      // If verification passed, sign in with Supabase
       const { data, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -41,13 +64,14 @@ export default function AdminLoginPage() {
           description: authError.message,
           variant: "destructive",
         })
+        setLoading(false)
         return
       }
 
       if (data.user) {
         toast({
           title: "Success",
-          description: "Logged in successfully",
+          description: "Admin logged in successfully",
         })
         setTimeout(() => {
           router.push("/admin")
@@ -72,7 +96,7 @@ export default function AdminLoginPage() {
         {/* Logo */}
         <div className="flex flex-col items-center mb-12">
           <div className=" flex items-center justify-center mb-[-50px]">
-             <Image src="/logo.png" alt="NutritiCare Logo" width={250} height={200} className="h-50 w-50" />
+            <Image src="/logo.png" alt="NutritiCare Logo" width={250} height={200} className="h-50 w-50" />
           </div>
 
           <h1 className="text-3xl font-bold text-foreground">Admin Dashboard Login</h1>
@@ -121,7 +145,7 @@ export default function AdminLoginPage() {
               </div>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 py-3 text-lg">
+            <Button type="submit" disabled={loading} className="w-full cursor-pointer bg-primary hover:bg-primary/90 py-3 text-lg">
               {loading ? "Logging In..." : "Login"}
             </Button>
           </form>

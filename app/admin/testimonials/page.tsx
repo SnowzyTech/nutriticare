@@ -52,6 +52,8 @@ export default function AdminTestimonialsPage() {
     customer_image: "/woman-avatar-3.png",
     rating: 5,
   })
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 7
 
   useEffect(() => {
     const supabase = createBrowserClient(
@@ -82,6 +84,7 @@ export default function AdminTestimonialsPage() {
         testimonial.customer_text.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     setFilteredTestimonials(filtered)
+    setCurrentPage(1) // Reset to first page when search changes
   }, [searchQuery, testimonials])
 
   const fetchTestimonials = async () => {
@@ -210,6 +213,10 @@ export default function AdminTestimonialsPage() {
     return null
   }
 
+  const totalPages = Math.ceil(filteredTestimonials.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const paginatedTestimonials = filteredTestimonials.slice(startIndex, startIndex + itemsPerPage)
+
   return (
     <div className="flex h-screen bg-background">
       <AdminSidebar />
@@ -257,57 +264,99 @@ export default function AdminTestimonialsPage() {
                 : "No testimonials found. Create your first testimonial!"}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredTestimonials.map((testimonial) => (
-                <div
-                  key={testimonial.id}
-                  className="bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg transition p-4"
-                >
-                  {/* Customer Info */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <img
-                      src={testimonial.customer_image || "/placeholder.svg"}
-                      alt={testimonial.customer_name}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-foreground">{testimonial.customer_name}</h3>
-                      <div className="flex gap-1">
-                        {Array.from({ length: testimonial.rating }).map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        ))}
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                {paginatedTestimonials.map((testimonial) => (
+                  <div
+                    key={testimonial.id}
+                    className="bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg transition p-4"
+                  >
+                    {/* Customer Info */}
+                    <div className="flex items-center gap-3 mb-4">
+                      <img
+                        src={testimonial.customer_image || "/placeholder.svg"}
+                        alt={testimonial.customer_name}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-foreground">{testimonial.customer_name}</h3>
+                        <div className="flex gap-1">
+                          {Array.from({ length: testimonial.rating }).map((_, i) => (
+                            <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          ))}
+                        </div>
                       </div>
                     </div>
+
+                    {/* Testimonial Text */}
+                    <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{testimonial.customer_text}</p>
+
+                    {/* Product */}
+                    <p className="text-xs text-muted-foreground mb-4 bg-background px-2 py-1 rounded w-fit">
+                      {getProductName(testimonial.product_id)}
+                    </p>
+
+                    {/* Actions */}
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEdit(testimonial)}
+                        className="flex-1 p-2 cursor-pointer border border-border hover:bg-background rounded transition flex items-center justify-center gap-2"
+                      >
+                        <Edit className="w-4 h-4 text-primary" />
+                        <span className="text-sm">Edit</span>
+                      </button>
+                      <button
+                        onClick={() => handleDelete(testimonial.id)}
+                        className="flex-1 p-2 cursor-pointer bg-primary/70 hover:bg-primary/85 border border-border rounded transition flex items-center justify-center gap-2"
+                      >
+                        <Trash2 className="w-4 h-4 text-red-500" />
+                        <span className="text-sm">Delete</span>
+                      </button>
+                    </div>
                   </div>
+                ))}
+              </div>
 
-                  {/* Testimonial Text */}
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{testimonial.customer_text}</p>
-
-                  {/* Product */}
-                  <p className="text-xs text-muted-foreground mb-4 bg-background px-2 py-1 rounded w-fit">
-                    {getProductName(testimonial.product_id)}
+              {totalPages > 1 && (
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 bg-card rounded-lg border border-border p-4">
+                  <p className="text-sm text-muted-foreground">
+                    Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredTestimonials.length)} of{" "}
+                    {filteredTestimonials.length} testimonials
                   </p>
-
-                  {/* Actions */}
                   <div className="flex gap-2">
                     <button
-                      onClick={() => handleEdit(testimonial)}
-                      className="flex-1 p-2 cursor-pointer border border-border hover:bg-background rounded transition flex items-center justify-center gap-2"
+                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 bg-background border border-border rounded-lg text-foreground hover:bg-background/80 disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer"
                     >
-                      <Edit className="w-4 h-4 text-primary" />
-                      <span className="text-sm">Edit</span>
+                      Previous
                     </button>
+                    <div className="flex items-center gap-2">
+                      {Array.from({ length: totalPages }).map((_, i) => (
+                        <button
+                          key={i + 1}
+                          onClick={() => setCurrentPage(i + 1)}
+                          className={`px-3 py-2 rounded-lg transition cursor-pointer ${
+                            currentPage === i + 1
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-background border border-border text-foreground hover:bg-background/80"
+                          }`}
+                        >
+                          {i + 1}
+                        </button>
+                      ))}
+                    </div>
                     <button
-                      onClick={() => handleDelete(testimonial.id)}
-                      className="flex-1 p-2 cursor-pointer bg-primary/70 hover:bg-primary/85 border border-border rounded transition flex items-center justify-center gap-2"
+                      onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 bg-background border border-border rounded-lg text-foreground hover:bg-background/80 disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer"
                     >
-                      <Trash2 className="w-4 h-4 text-red-500" />
-                      <span className="text-sm">Delete</span>
+                      Next
                     </button>
                   </div>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
 
           <Dialog open={showDialog} onOpenChange={setShowDialog}>
