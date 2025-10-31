@@ -14,7 +14,7 @@ export default function BlogPage() {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-gradient-to-b from-purple-950 via-purple-950 to-purple-900 rounded-lg p-12 mb-12 text-center">
+        <div className="bg-gradient-to-r from-purple-900/20 to-purple-800/15 rounded-lg p-12 mb-12 text-center">
           <h1 className="text-4xl font-bold text-foreground mb-4">Unlock Your Healthiest Self</h1>
           <p className="text-lg text-muted-foreground">Your guide to a healthier lifestyle.</p>
         </div>
