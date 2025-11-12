@@ -24,12 +24,11 @@ export default function Home() {
       <HeroCarousel />
 
       <section
-        ref={aboutRef.ref}
-        className={`transition-all duration-700 ${aboutRef.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+        ref={promiseRef.ref}
+        className={`transition-all duration-700 ${promiseRef.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
       >
-        <AboutSection />
+        <PromiseSection />
       </section>
-
       <section
         ref={productsRef.ref}
         className={`transition-all duration-700 ${productsRef.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
@@ -37,12 +36,6 @@ export default function Home() {
         <FeaturedProducts />
       </section>
 
-      <section
-        ref={promiseRef.ref}
-        className={`transition-all duration-700 ${promiseRef.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
-      >
-        <PromiseSection />
-      </section>
 
       <section
         ref={blogRef.ref}
@@ -58,7 +51,7 @@ export default function Home() {
           <CTASection />
         </div>
       </main>
-      
+
       <Footer />
     </div>
   )

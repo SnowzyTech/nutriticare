@@ -1,9 +1,18 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next"
 
-const f = createUploadthing()
+const f = createUploadthing({
+  token: process.env.UPLOADTHING_SECRET,
+})
 
 export const ourFileRouter = {
   imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
+    .middleware(async () => {
+      return {}
+    })
+    .onUploadComplete(async ({ file }) => {
+      return { url: file.url }
+    }),
+  cvUploader: f({ pdf: { maxFileSize: "8MB", maxFileCount: 1 } })
     .middleware(async () => {
       return {}
     })

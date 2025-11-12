@@ -1,9 +1,18 @@
 import { getSupabaseServer } from "@/lib/supabase-server"
 import { type NextRequest, NextResponse } from "next/server"
+import { apiLimiter, checkRateLimit } from "@/lib/rate-limit"
 
 export async function GET(request: NextRequest) {
   try {
     const supabase = await getSupabaseServer()
+
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
+
+    const rateLimit = await checkRateLimit(`products:${ip}`, apiLimiter)
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 })
+    }
+
     const { searchParams } = new URL(request.url)
 
     const categoriesParam = searchParams.get("categories")
@@ -13,14 +22,28 @@ export async function GET(request: NextRequest) {
     const page = Number.parseInt(searchParams.get("page") || "1")
     const limit = 12
 
+    if (page < 1 || isNaN(page)) {
+      return NextResponse.json({ error: "Invalid page number" }, { status: 400 })
+    }
+
+    if (minPrice < 0 || maxPrice > 10000000 || minPrice > maxPrice) {
+      return NextResponse.json({ error: "Invalid price range" }, { status: 400 })
+    }
+
     let query = supabase.from("products").select("*")
 
     if (categoriesParam) {
-      const categories = categoriesParam.split(",")
+      const categories = categoriesParam.split(",").filter((c) => c.length > 0 && c.length < 50)
+      if (categories.length === 0) {
+        return NextResponse.json({ error: "Invalid categories" }, { status: 400 })
+      }
       query = query.in("category", categories)
     }
 
     if (search) {
+      if (search.length > 100) {
+        return NextResponse.json({ error: "Search query too long" }, { status: 400 })
+      }
       query = query.ilike("name", `%${search}%`)
     }
 

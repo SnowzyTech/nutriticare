@@ -10,6 +10,7 @@ import { AdminHeader } from "@/components/admin/header"
 import { Button } from "@/components/ui/button"
 import { Plus, Edit, Trash2, Search, X } from "lucide-react"
 import type { Product } from "@/lib/types"
+import { createProduct, updateProduct, deleteProduct } from "@/lib/server-actions"
 import {
   Dialog,
   DialogContent,
@@ -116,13 +117,13 @@ export default function AdminProductsPage() {
   }
 
   const handleImageUpload = async (file: File) => {
-    const formData = new FormData()
-    formData.append("file", file)
+    const formDataUpload = new FormData()
+    formDataUpload.append("file", file)
 
     try {
       const response = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
+        body: formDataUpload,
       })
       const data = await response.json()
       if (data.url) {
@@ -156,71 +157,45 @@ export default function AdminProductsPage() {
     }
 
     const payload = {
-      ...formData,
+      name: formData.name,
+      slug: formData.slug,
+      description: formData.description,
+      category: formData.category,
       price: Number.parseFloat(formData.price),
-      original_price: formData.original_price ? Number.parseFloat(formData.original_price) : null,
-      stock: Number.parseInt(formData.stock) || 0,
+      original_price: formData.original_price ? Number.parseFloat(formData.original_price) : undefined,
       image_url: imageUrl,
+      stock: Number.parseInt(formData.stock) || 0,
     }
 
     try {
       if (editingId) {
-        const response = await fetch(`/api/products/${editingId}/update`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        })
-        if (response.ok) {
-          fetchProducts()
-          fetchCategories()
-          setShowDialog(false)
-          setEditingId(null)
-          setFormData({
-            name: "",
-            slug: "",
-            description: "",
-            category: "Vitamins & Minerals",
-            price: "",
-            original_price: "",
-            image_url: "",
-            stock: "",
-          })
-          toast({
-            title: "Success",
-            description: "Product updated successfully",
-          })
-        }
+        await updateProduct(editingId, payload)
       } else {
-        const response = await fetch("/api/products/create", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        })
-        if (response.ok) {
-          fetchProducts()
-          fetchCategories()
-          setShowDialog(false)
-          setFormData({
-            name: "",
-            slug: "",
-            description: "",
-            category: "Vitamins & Minerals",
-            price: "",
-            original_price: "",
-            image_url: "",
-            stock: "",
-          })
-          toast({
-            title: "Success",
-            description: "Product created successfully",
-          })
-        }
+        await createProduct(payload)
       }
+      fetchProducts()
+      fetchCategories()
+      setShowDialog(false)
+      setEditingId(null)
+      setFormData({
+        name: "",
+        slug: "",
+        description: "",
+        category: "Vitamins & Minerals",
+        price: "",
+        original_price: "",
+        image_url: "",
+        stock: "",
+      })
+      toast({
+        title: "Success",
+        description: editingId ? "Product updated successfully" : "Product created successfully",
+      })
     } catch (error) {
-      console.error("Failed to save product:", error)
+      const errorMessage = error instanceof Error ? error.message : "Failed to save product"
       toast({
         title: "Error",
-        description: "Failed to save product",
+        description: errorMessage,
         variant: "destructive",
       })
     }
@@ -229,21 +204,17 @@ export default function AdminProductsPage() {
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this product?")) {
       try {
-        const response = await fetch(`/api/products/${id}/delete`, {
-          method: "DELETE",
+        await deleteProduct(id)
+        fetchProducts()
+        toast({
+          title: "Success",
+          description: "Product deleted successfully",
         })
-        if (response.ok) {
-          fetchProducts()
-          toast({
-            title: "Success",
-            description: "Product deleted successfully",
-          })
-        }
       } catch (error) {
-        console.error("Failed to delete product:", error)
+        const errorMessage = error instanceof Error ? error.message : "Failed to delete product"
         toast({
           title: "Error",
-          description: "Failed to delete product",
+          description: errorMessage,
           variant: "destructive",
         })
       }

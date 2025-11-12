@@ -83,7 +83,7 @@ export function ProductGrid({ categories = [], search, page = 1, priceRange = [0
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-1">
+      <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-1">
         {products.map((product, index) => (
           <div
             key={product.id}
@@ -92,7 +92,7 @@ export function ProductGrid({ categories = [], search, page = 1, priceRange = [0
             <Link href={`/shop/${product.slug}`} className="flex-1 flex flex-col">
               <div className="relative h-full bg-gradient-to-br from-primary/20 to-primary/10 overflow-hidden">
                 <div
-                  className="w-full h-[300px] group-hover:scale-105 transition"
+                  className="w-full h-[200px] xs:h-[180px] sm:h-[240px] md:h-[280px] lg:h-[300px] group-hover:scale-105 transition"
                   style={{
                     backgroundImage: `url(${product.image_url || "/dietary-supplements.png"})`,
                     backgroundSize: "cover",
@@ -100,35 +100,41 @@ export function ProductGrid({ categories = [], search, page = 1, priceRange = [0
                   }}
                 />
                 {product.original_price && (
-                  <div className="absolute top-3 right-3 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-semibold">
+                  <div className="absolute top-2 right-2 bg-primary text-primary-foreground px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-semibold">
                     SALE
                   </div>
                 )}
               </div>
-              <div className="p-4 flex-1 flex flex-col">
+              <div className="p-3 sm:p-4 flex-1 flex flex-col">
                 {product.category && (
-                  <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-2">{product.category}</p>
+                  <p className="text-[10px] sm:text-xs font-semibold text-primary uppercase tracking-wide mb-1 sm:mb-2">
+                    {product.category}
+                  </p>
                 )}
-                <h3 className="font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition">
+                <h3 className="font-semibold text-sm sm:text-base text-foreground mb-1 sm:mb-2 line-clamp-2 group-hover:text-primary transition">
                   {product.name}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-4 flex-1 line-clamp-2">{product.description}</p>
-                <div className="flex items-center justify-between mb-4">
+                <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 flex-1 line-clamp-2">
+                  {product.description}
+                </p>
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <div>
-                    <p className="text-lg font-bold text-primary">₦{product.price.toFixed(2)}</p>
+                    <p className="text-base sm:text-lg font-bold text-primary">₦{product.price.toFixed(2)}</p>
                     {product.original_price && (
-                      <p className="text-sm text-muted-foreground line-through">₦{product.original_price.toFixed(2)}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground line-through">
+                        ₦{product.original_price.toFixed(2)}
+                      </p>
                     )}
                   </div>
                 </div>
               </div>
             </Link>
-            <div className="px-4 pb-4">
+            <div className="px-3 pb-3 sm:px-4 sm:pb-4">
               <Button
                 onClick={(e) => handleAddToCart(e, product)}
-                className="w-full bg-primary hover:bg-primary/90 gap-2"
+                className="w-full bg-primary hover:bg-primary/90 gap-1 sm:gap-2 text-xs sm:text-sm h-8 sm:h-10"
               >
-                <ShoppingCart className="w-4 h-4" />
+                <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4" />
                 Add to Cart
               </Button>
             </div>
@@ -136,7 +142,6 @@ export function ProductGrid({ categories = [], search, page = 1, priceRange = [0
         ))}
       </div>
 
-      {/* Pagination */}
       {total > 12 && (
         <div className="flex items-center justify-center gap-2">
           <Button variant="outline" disabled={page === 1}>

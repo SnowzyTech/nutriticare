@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { CartProvider } from "@/lib/cart-context"
@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo.png",
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#1f2937",
+  userScalable: false,
 }
 
 export default function RootLayout({

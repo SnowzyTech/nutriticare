@@ -1,8 +1,17 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getSupabaseAdmin } from "@/lib/supabase-server"
+import { fileUploadSchema } from "@/lib/validation"
+import { formLimiter, checkRateLimit } from "@/lib/rate-limit"
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
+
+    const rateLimit = await checkRateLimit(`upload:${ip}`, formLimiter)
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: "Too many uploads. Please try again later." }, { status: 429 })
+    }
+
     const formData = await request.formData()
     const file = formData.get("file") as File
 
@@ -10,9 +19,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 })
     }
 
+    const validationResult = fileUploadSchema.safeParse({
+      file: {
+        size: file.size,
+        type: file.type,
+      },
+    })
+
+    if (!validationResult.success) {
+      return NextResponse.json({ error: validationResult.error.errors[0].message }, { status: 400 })
+    }
+
+    const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, "").substring(0, 100)
+
+    if (!sanitizedFileName) {
+      return NextResponse.json({ error: "Invalid filename" }, { status: 400 })
+    }
+
     const supabase = await getSupabaseAdmin()
     const buffer = await file.arrayBuffer()
-    const fileName = `${Date.now()}-${file.name}`
+    const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}-${sanitizedFileName}`
 
     const { data, error } = await supabase.storage.from("images").upload(fileName, buffer, {
       contentType: file.type,

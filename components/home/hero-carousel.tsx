@@ -13,34 +13,34 @@ export function HeroCarousel() {
   const slides = [
     {
       image: "/dietary-supplements.png",
-      title: "Healing's blueprint is in nature, not labs",
+      title: "Nature holds the blueprint for healing — not the labs",
       description:
-        "When you give the body what it truly needs, it knows how to heal itself, and that's why we create natural herbal blends (Products) that help your body detox, restore, and HEAL — from the inside out.",
+        "When you give the body what it truly needs, it knows how to heal itself, and that’s why we create natural herbal blends (Products) that help your body detox, restore, and HEAL — from the inside out.",
     },
-    {
-      image: "/health-wellness.png",
-      title: "Backed by Nature. Proven by Science.",
-      description:
-        "Every formula begins where real healing starts — in nature's own medicine cabinet. We source pure, potent herbs grown in rich African soil and blend them to awaken your body's natural power to heal and renew.",
-    },
-    {
-      image: "/dietary-supplements.png",
-      title: "Pure Ingredients. Real Results.",
-      description:
-        "We don't guess — we prove. Each product is guided by research, tested for results, and refined through modern science so you can trust every dose to do exactly what it says.",
-    },
-    {
-      image: "/health-wellness.png",
-      title: "Honesty. Integrity. Wellness.",
-      description:
-        "No gimmicks. No shortcuts. No empty promises. Just honest wellness — rooted in integrity, crafted with care, and designed to help you feel your best, naturally.",
-    },
-    {
-      image: "/dietary-supplements.png",
-      title: "Wellness That's Truly Felt.",
-      description:
-        "Because you deserve wellness that's not just talked about… but truly felt. Experience the difference that natural, science-backed nutrition can make in your life.",
-    },
+    // {
+    //   image: "/health-wellness.png",
+    //   title: "Backed by Nature. Proven by Science.",
+    //   description:
+    //     "Every formula begins where real healing starts — in nature's own medicine cabinet. We source pure, potent herbs grown in rich African soil and blend them to awaken your body's natural power to heal and renew.",
+    // },
+    // {
+    //   image: "/dietary-supplements.png",
+    //   title: "Pure Ingredients. Real Results.",
+    //   description:
+    //     "We don't guess — we prove. Each product is guided by research, tested for results, and refined through modern science so you can trust every dose to do exactly what it says.",
+    // },
+    // {
+    //   image: "/health-wellness.png",
+    //   title: "Honesty. Integrity. Wellness.",
+    //   description:
+    //     "No gimmicks. No shortcuts. No empty promises. Just honest wellness — rooted in integrity, crafted with care, and designed to help you feel your best, naturally.",
+    // },
+    // {
+    //   image: "/dietary-supplements.png",
+    //   title: "Wellness That's Truly Felt.",
+    //   description:
+    //     "Because you deserve wellness that's not just talked about… but truly felt. Experience the difference that natural, science-backed nutrition can make in your life.",
+    // },
   ]
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export function HeroCarousel() {
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 text-balance">{slide.title}</h1>
             <p className="text-lg text-foreground mb-8 max-w-2xl">{slide.description}</p>
             <Link href="/shop">
-              <Button className="bg-primary hover:bg-primary/90 text-lg px-8 py-6 cursor-pointer mb-8">Explore Our Shop</Button>
+              <Button className="bg-primary hover:bg-primary/90 text-lg px-8 py-6 cursor-pointer mb-8 text-foreground">Explore Our Shop</Button>
             </Link>
           </div>
         </div>
@@ -94,7 +94,7 @@ export function HeroCarousel() {
       
 
       {/* Dot Indicators */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2 mt-6">
+      {/* <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2 mt-6">
         {slides.map((_, index) => (
           <button
             key={index}
@@ -102,7 +102,7 @@ export function HeroCarousel() {
             className={`w-3 h-3 rounded-full transition ${index === currentSlide ? "bg-primary" : "bg-primary/40"}`}
           />
         ))}
-      </div>
+      </div> */}
     </section>
   )
 }

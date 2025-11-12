@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
@@ -21,6 +21,8 @@ export default function ContactPage() {
   const [loading, setLoading] = useState(false)
   const contentRef = useScrollAnimation()
   const { toast } = useToast()
+
+  useEffect(() => {}, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -187,16 +189,13 @@ export default function ContactPage() {
                   </div>
                   <div className="min-w-0">
                     <h3 className="font-semibold text-foreground mb-1">Email</h3>
-                    <p className="text-muted-foreground text-sm sm:text-base break-words">Mynutriticaresuppport@gmail.com</p>
+                    <p className="text-muted-foreground text-sm sm:text-base break-words">
+                      Mynutriticaresuppport@gmail.com
+                    </p>
                   </div>
                 </div>
 
-                {/* Map Image */}
-                <img
-                  src="/office-location.jpg"
-                  alt="Our office location"
-                  className="h-48 sm:h-64 w-full rounded-lg object-cover"
-                />
+              
               </div>
             </div>
           </div>

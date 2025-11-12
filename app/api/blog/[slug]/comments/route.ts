@@ -1,5 +1,7 @@
 import { getSupabaseServer } from "@/lib/supabase-server"
 import { type NextRequest, NextResponse } from "next/server"
+import { commentSchema, sanitizeInput } from "@/lib/validation"
+import { formLimiter, checkRateLimit } from "@/lib/rate-limit"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
@@ -30,9 +32,24 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
+
+    const rateLimit = await checkRateLimit(`comment:${ip}`, formLimiter)
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: "Too many comments. Please try again later." }, { status: 429 })
+    }
+
     const supabase = await getSupabaseServer()
     const { slug } = await params
-    const { content } = await request.json()
+    const body = await request.json()
+
+    const validationResult = commentSchema.safeParse({ content: body.content })
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: "Invalid comment: " + validationResult.error.errors[0].message },
+        { status: 400 },
+      )
+    }
 
     const {
       data: { user },
@@ -48,12 +65,14 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: "Post not found" }, { status: 404 })
     }
 
+    const sanitizedContent = sanitizeInput(validationResult.data.content)
+
     const { data, error } = await supabase
       .from("blog_comments")
       .insert({
         post_id: post.id,
         user_id: user.id,
-        content,
+        content: sanitizedContent,
       })
       .select()
 

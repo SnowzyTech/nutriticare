@@ -3,9 +3,9 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { Leaf, Beaker, Heart } from "lucide-react"
 import Link from "next/link"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { CareersSection } from "@/components/careers-section"
 
 export default function AboutPage() {
   const heroRef = useScrollAnimation()
@@ -14,6 +14,7 @@ export default function AboutPage() {
   const textRef = useScrollAnimation()
   const valuesRef = useScrollAnimation()
   const deliveryRef = useScrollAnimation()
+  const careersRef = useScrollAnimation()
   const ctaRef = useScrollAnimation()
 
   return (
@@ -21,20 +22,16 @@ export default function AboutPage() {
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
-        <section ref={heroRef.ref} className={`${heroRef.isVisible ? "animate-slide-in-down" : "opacity-0"} mb-16`}>
+        <section ref={heroRef.ref} className={`${heroRef.isVisible ? "animate-slide-in-down" : "opacity-0"} mb-10`}>
           <div className="bg-gradient-to-r from-primary/20 to-primary/10 rounded-lg p-12 text-center">
-            <h1 className="text-4xl font-bold text-foreground mb-4">Our Commitment to Your Health</h1>
-            <p className="text-lg text-muted-foreground">
-              Rooted in Nature. Refined by Care. Learn about our mission to provide high-quality, natural nutritional
-              supplements to fuel your wellness journey.
-            </p>
+            <h1 className="text-4xl font-bold text-foreground mb-4">Our Story – Rooted in Nature. Refined by Care.</h1>
+            <p className="text-lg text-muted-foreground"></p>
           </div>
         </section>
 
         {/* Our Story Section */}
         <section ref={storyRef.ref} className={`${storyRef.isVisible ? "animate-slide-in-up" : "opacity-0"} mb-16`}>
-          <h2 className="text-3xl font-bold text-foreground mb-8">Our Story</h2>
-          <div className="space-y-6 text-muted-foreground max-w-4xl">
+          <div className="space-y-6 text-foreground/90 max-w-5xl mx-auto px-4 md:px-2 lg:px-0">
             <p>
               In a world that rushes healing, we choose to slow down. To listen. To study the quiet wisdom of herbs that
               have restored balance for generations.
@@ -54,19 +51,26 @@ export default function AboutPage() {
 
         {/* Why Choose Us Section */}
         <section ref={whyRef.ref} className={`${whyRef.isVisible ? "animate-slide-in-up" : "opacity-0"} mb-16`}>
-          <h2 className="text-3xl font-bold text-foreground mb-8">Why Choose Us: The Nutriticare Standard</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
+            Why Choose Us: The Nutriticare Standard
+          </h2>
           <div className="bg-card rounded-lg p-8 border border-border mb-8">
             <h3 className="text-2xl font-bold text-foreground mb-4">Purity You Can Feel. Integrity You Can Trust.</h3>
-            <p ref={textRef.ref}  className={`${textRef.isVisible ? "animate-slide-in-up" : "opacity-0"} text-muted-foreground mb-6`}>
+            <p
+              ref={textRef.ref}
+              className={`${textRef.isVisible ? "animate-slide-in-up" : "opacity-0"} text-foreground/90 mb-6 leading-10`}
+            >
               Every bottle, every blend, every cup begins with respect — for your body, for tradition, and for nature
-              itself. We don't believe in artificial shortcuts. We believe in craft, consistency, and care — Everything
-              we make starts with honesty and ends with results. We're a team obsessed with helping people heal the
-              right way — naturally.
+              itself. <br />
+              We don't believe in artificial shortcuts. <br /> We believe in craft, consistency, and care — Everything
+              we make starts with honesty and ends with results. <br /> We're a team obsessed with helping people heal
+              the right way — naturally.
             </p>
           </div>
 
           {/* Our Promise */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <h2 className="text-[28px] font-bold text-foreground mt-12 mb-6 text-center">Our Promise Is Simple</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="bg-background rounded-lg p-6 border border-border">
               <h4 className="text-lg font-bold text-foreground mb-3">100% Natural Ingredients</h4>
               <p className="text-muted-foreground text-sm">
@@ -85,44 +89,9 @@ export default function AboutPage() {
                 Not promises, but proof from happy customers. Real wellness, truly felt.
               </p>
             </div>
-          </div>
-        </section>
-
-        {/* Values Section */}
-        <section ref={valuesRef.ref} className={`${valuesRef.isVisible ? "animate-slide-in-up" : "opacity-0"} mb-16`}>
-          <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Our Core Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-card rounded-lg p-8 border border-border text-center">
-              <div className="w-16 h-16 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Leaf className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">Backed by Nature</h3>
-              <p className="text-muted-foreground">
-                We source pure, potent herbs grown in rich African soil and blend them to awaken your body's natural
-                power to heal and renew.
-              </p>
-            </div>
-
-            <div className="bg-card rounded-lg p-8 border border-border text-center">
-              <div className="w-16 h-16 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Beaker className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">Proven by Science</h3>
-              <p className="text-muted-foreground">
-                We don't guess — we prove. Each product is guided by research, tested for results, and refined through
-                modern science.
-              </p>
-            </div>
-
-            <div className="bg-card rounded-lg p-8 border border-border text-center">
-              <div className="w-16 h-16 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Heart className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">Driven by Truth</h3>
-              <p className="text-muted-foreground">
-                No gimmicks. No shortcuts. No empty promises. Just honest wellness — rooted in integrity, crafted with
-                care.
-              </p>
+            <div className="bg-background rounded-lg p-6 border border-border">
+              <h4 className="text-lg font-bold text-foreground mb-3">🚚Delivered Nationwide</h4>
+              <p className="text-muted-foreground text-sm">from our hands to your home.</p>
             </div>
           </div>
         </section>
@@ -132,12 +101,15 @@ export default function AboutPage() {
           ref={deliveryRef.ref}
           className={`${deliveryRef.isVisible ? "animate-slide-in-up" : "opacity-0"} mb-16`}
         >
-          <div className="bg-gradient-to-r from-primary/20 to-primary/10 rounded-lg p-12 text-center">
-            <h3 className="text-2xl font-bold text-foreground mb-4">Delivered Nationwide</h3>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              From our hands to your home. Because what you put into your body should never be a compromise.
+          <div className="bg-gradient-to-r from-primary/20 to-primary/10 rounded-lg lg:p-10 p-8 -mt-6 ">
+            <p className="text-foreground/80 max-w-7xl mx-auto">
+              Because what you put into your body should never be a compromise.
             </p>
           </div>
+        </section>
+
+        <section ref={careersRef.ref} className={`${careersRef.isVisible ? "animate-slide-in-up" : "opacity-0"} mb-16`}>
+          <CareersSection />
         </section>
 
         {/* CTA Section */}

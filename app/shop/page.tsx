@@ -19,7 +19,9 @@ export default function ShopPage() {
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" ref={contentRef.ref}>
         <div className={`${contentRef.isVisible ? "animate-slide-in-down" : "opacity-0"}`}>
-          <h1 className="text-4xl font-bold text-foreground mb-8">All Products</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-3 text-center">Our Products</h1>
+          <h2 className="text-center text-lg text-foreground/90">Your Wellness Journey Starts Here.</h2>
+          <p className="text-center mb-8 mt-2 text-foreground/90 text-sm"> Explore our natural herbal solutions — each one crafted to help your body find its balance again.</p>
 
           {/* Search Bar */}
           <div className="mb-8 flex gap-4">

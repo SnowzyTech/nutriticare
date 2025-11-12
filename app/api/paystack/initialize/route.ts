@@ -1,14 +1,41 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { checkoutSchema } from "@/lib/checkout-validation"
+import { formLimiter, checkRateLimit } from "@/lib/rate-limit"
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
+
+    const rateLimit = await checkRateLimit(`checkout:${ip}`, formLimiter)
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: "Too many payment attempts. Please try again later." }, { status: 429 })
+    }
+
     const body = await request.json()
-    const { email, amount, reference, customerDetails, items } = body
+
+    const validationResult = checkoutSchema.safeParse(body)
+    if (!validationResult.success) {
+      console.error("Validation error:", validationResult.error.errors)
+      return NextResponse.json(
+        { error: "Invalid checkout data: " + validationResult.error.errors[0].message },
+        { status: 400 },
+      )
+    }
+
+    const { email, amount, reference, customerDetails, items } = validationResult.data
+
+    const amountInKobo = Math.round(amount * 100)
+    if (amountInKobo < 100 || amountInKobo > 50000000) {
+      return NextResponse.json({ error: "Invalid amount" }, { status: 400 })
+    }
+
+    if (!Array.isArray(items) || items.length === 0) {
+      return NextResponse.json({ error: "Invalid items" }, { status: 400 })
+    }
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
     const callbackUrl = `${baseUrl}/api/paystack/callback`
 
-    // Initialize Paystack payment
     const response = await fetch("https://api.paystack.co/transaction/initialize", {
       method: "POST",
       headers: {
@@ -16,14 +43,13 @@ export async function POST(request: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email,
-        amount: Math.round(amount * 100), // Convert to kobo
+        email: customerDetails.email,
+        amount: amountInKobo,
         reference,
         callback_url: callbackUrl,
         metadata: {
           customerDetails,
           items,
-          cart: items, // Include as 'cart' for consistency with callback
         },
       }),
     })
@@ -31,7 +57,7 @@ export async function POST(request: NextRequest) {
     const data = await response.json()
 
     if (!response.ok) {
-      return NextResponse.json({ error: data.message }, { status: 400 })
+      return NextResponse.json({ error: data.message || "Payment initialization failed" }, { status: 400 })
     }
 
     return NextResponse.json({

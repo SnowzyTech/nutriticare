@@ -9,6 +9,7 @@ import { AdminSidebar } from "@/components/admin/sidebar"
 import { AdminHeader } from "@/components/admin/header"
 import { Button } from "@/components/ui/button"
 import { Plus, Edit, Trash2, Search, Star } from "lucide-react"
+import { updateTestimonial, deleteTestimonial } from "@/lib/server-actions"
 import {
   Dialog,
   DialogContent,
@@ -84,7 +85,7 @@ export default function AdminTestimonialsPage() {
         testimonial.customer_text.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     setFilteredTestimonials(filtered)
-    setCurrentPage(1) // Reset to first page when search changes
+    setCurrentPage(1)
   }, [searchQuery, testimonials])
 
   const fetchTestimonials = async () => {
@@ -136,21 +137,17 @@ export default function AdminTestimonialsPage() {
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this testimonial?")) {
       try {
-        const response = await fetch(`/api/testimonials/${id}/delete`, {
-          method: "DELETE",
+        await deleteTestimonial(id)
+        fetchTestimonials()
+        toast({
+          title: "Success",
+          description: "Testimonial deleted successfully",
         })
-        if (response.ok) {
-          fetchTestimonials()
-          toast({
-            title: "Success",
-            description: "Testimonial deleted successfully",
-          })
-        }
       } catch (error) {
-        console.error("Failed to delete testimonial:", error)
+        const errorMessage = error instanceof Error ? error.message : "Failed to delete testimonial"
         toast({
           title: "Error",
-          description: "Failed to delete testimonial",
+          description: errorMessage,
           variant: "destructive",
         })
       }
@@ -167,39 +164,30 @@ export default function AdminTestimonialsPage() {
 
     try {
       if (editingId) {
-        const response = await fetch(`/api/testimonials/${editingId}/update`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+        await updateTestimonial(editingId, {
+          name: formData.customer_name,
+          comment: formData.customer_text,
+          rating: formData.rating,
         })
-        if (response.ok) {
-          fetchTestimonials()
-          setShowDialog(false)
-          toast({
-            title: "Success",
-            description: "Testimonial updated successfully",
-          })
-        }
       } else {
-        const response = await fetch("/api/testimonials/create", {
+        // Public testimonial creation - allowed without admin auth
+        await fetch("/api/testimonials/create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         })
-        if (response.ok) {
-          fetchTestimonials()
-          setShowDialog(false)
-          toast({
-            title: "Success",
-            description: "Testimonial created successfully",
-          })
-        }
       }
+      fetchTestimonials()
+      setShowDialog(false)
+      toast({
+        title: "Success",
+        description: editingId ? "Testimonial updated successfully" : "Testimonial created successfully",
+      })
     } catch (error) {
-      console.error("Failed to save testimonial:", error)
+      const errorMessage = error instanceof Error ? error.message : "Failed to save testimonial"
       toast({
         title: "Error",
-        description: "Failed to save testimonial",
+        description: errorMessage,
         variant: "destructive",
       })
     }

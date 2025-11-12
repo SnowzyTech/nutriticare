@@ -10,6 +10,7 @@ import { AdminHeader } from "@/components/admin/header"
 import { Button } from "@/components/ui/button"
 import { Plus, Edit, Trash2, Search, X } from "lucide-react"
 import type { BlogPost } from "@/lib/types"
+import { createBlogPost, updateBlogPost, deleteBlogPost } from "@/lib/server-actions"
 import {
   Dialog,
   DialogContent,
@@ -88,13 +89,13 @@ export default function AdminBlogPage() {
   }
 
   const handleImageUpload = async (file: File) => {
-    const formData = new FormData()
-    formData.append("file", file)
+    const formDataUpload = new FormData()
+    formDataUpload.append("file", file)
 
     try {
       const response = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
+        body: formDataUpload,
       })
       const data = await response.json()
       if (data.url) {
@@ -140,21 +141,17 @@ export default function AdminBlogPage() {
   const handleDelete = async (slug: string) => {
     if (confirm("Are you sure you want to delete this blog post?")) {
       try {
-        const response = await fetch(`/api/blog/${slug}/delete`, {
-          method: "DELETE",
+        await deleteBlogPost(slug)
+        fetchBlogPosts()
+        toast({
+          title: "Success",
+          description: "Blog post deleted successfully",
         })
-        if (response.ok) {
-          fetchBlogPosts()
-          toast({
-            title: "Success",
-            description: "Blog post deleted successfully",
-          })
-        }
       } catch (error) {
-        console.error("Failed to delete blog post:", error)
+        const errorMessage = error instanceof Error ? error.message : "Failed to delete blog post"
         toast({
           title: "Error",
-          description: "Failed to delete blog post",
+          description: errorMessage,
           variant: "destructive",
         })
       }
@@ -189,44 +186,25 @@ export default function AdminBlogPage() {
     const payload = {
       ...formData,
       featured_image: imageUrl,
-      published_at: formData.published ? new Date().toISOString() : null,
     }
 
     try {
       if (editingSlug) {
-        const response = await fetch(`/api/blog/${editingSlug}/update`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        })
-        if (response.ok) {
-          fetchBlogPosts()
-          setShowDialog(false)
-          toast({
-            title: "Success",
-            description: "Blog post updated successfully",
-          })
-        }
+        await updateBlogPost(editingSlug, payload)
       } else {
-        const response = await fetch("/api/blog/create", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        })
-        if (response.ok) {
-          fetchBlogPosts()
-          setShowDialog(false)
-          toast({
-            title: "Success",
-            description: "Blog post created successfully",
-          })
-        }
+        await createBlogPost(payload)
       }
+      fetchBlogPosts()
+      setShowDialog(false)
+      toast({
+        title: "Success",
+        description: editingSlug ? "Blog post updated successfully" : "Blog post created successfully",
+      })
     } catch (error) {
-      console.error("Failed to save blog post:", error)
+      const errorMessage = error instanceof Error ? error.message : "Failed to save blog post"
       toast({
         title: "Error",
-        description: "Failed to save blog post",
+        description: errorMessage,
         variant: "destructive",
       })
     }
@@ -254,7 +232,10 @@ export default function AdminBlogPage() {
               </button>
               <h1 className="text-3xl md:text-4xl font-bold text-foreground">Blog Posts</h1>
             </div>
-            <Button onClick={handleAddNew} className="bg-primary hover:bg-primary/90 gap-2 w-full md:w-auto cursor-pointer">
+            <Button
+              onClick={handleAddNew}
+              className="bg-primary hover:bg-primary/90 gap-2 w-full md:w-auto cursor-pointer"
+            >
               <Plus className="w-5 h-5" />
               Add Blog Post
             </Button>

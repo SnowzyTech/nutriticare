@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, Package, FileText, ShoppingCart, LogOut, Heart, Menu, X } from "lucide-react"
+import { LayoutDashboard, Package, FileText, ShoppingCart, LogOut, Heart, Menu, X, Briefcase } from "lucide-react"
 import { useState } from "react"
 import { getSupabaseClient } from "@/lib/supabase-client"
 
@@ -17,6 +17,7 @@ export function AdminSidebar() {
     { href: "/admin/blog", label: "Blog Posts", icon: FileText },
     { href: "/admin/testimonials", label: "Testimonials", icon: Heart },
     { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+    { href: "/admin/applications", label: "Applications", icon: Briefcase },
   ]
 
   const handleLogout = async () => {
