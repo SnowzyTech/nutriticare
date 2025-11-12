@@ -7,21 +7,19 @@ const nextConfig = {
     unoptimized: true,
   },
 
-  // --- ADD THIS PART TO FIX THE BUILD ERROR ---
+  // --- This is the fix for the jsdom error ---
   webpack: (config, { isServer }) => {
-    // This is the fix:
-    // We tell webpack to treat 'jsdom' as an empty module on the server
-    // to prevent it from being bundled into your API routes.
     if (isServer) {
       config.resolve.alias = {
         ...config.resolve.alias,
         'jsdom': false,
       };
     }
-
     return config;
   },
-  // --- END OF FIX ---
+
+  // --- ADD THIS LINE to fix the new build error ---
+  turbopack: false, 
 }
 
 export default nextConfig
