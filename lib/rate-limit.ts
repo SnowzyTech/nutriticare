@@ -48,6 +48,11 @@ export async function checkRateLimit(key: string, limiter: Ratelimit | null) {
     return { success: true } // Allow request if rate limiting is not configured
   }
 
-  const result = await limiter.limit(key)
-  return result
+  try {
+    const result = await limiter.limit(key)
+    return result
+  } catch (error) {
+    console.error("[Rate Limit] Error checking rate limit:", error)
+    return { success: true } // Fail open - allow request on error
+  }
 }

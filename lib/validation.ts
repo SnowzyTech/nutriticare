@@ -1,10 +1,19 @@
-import DOMPurify from "isomorphic-dompurify"
 import { z } from "zod"
 
-// Sanitize user input to prevent XSS attacks
+// Simple HTML sanitization function that works on both server and client
 export function sanitizeInput(input: string): string {
   if (typeof input !== "string") return ""
-  return DOMPurify.sanitize(input, { ALLOWED_TAGS: [] })
+
+  // Remove HTML tags and decode HTML entities
+  return input
+    .replace(/<[^>]*>/g, "") // Remove HTML tags
+    .replace(/&nbsp;/g, " ")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;/g, "'")
+    .trim()
 }
 
 // Validate contact form data
