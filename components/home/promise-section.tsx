@@ -4,7 +4,7 @@ import { Leaf, Beaker, Heart } from "lucide-react"
 
 export function PromiseSection() {
   return (
-    <section className="py-16 mb-16 bg-card/50">
+    <section className="py-16 mb-1 bg-card/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Promise */}
         <div className="text-center mb-16">

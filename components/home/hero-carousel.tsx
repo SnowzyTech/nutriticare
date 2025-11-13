@@ -17,30 +17,6 @@ export function HeroCarousel() {
       description:
         "When you give the body what it truly needs, it knows how to heal itself, and that’s why we create natural herbal blends (Products) that help your body detox, restore, and HEAL — from the inside out.",
     },
-    // {
-    //   image: "/health-wellness.png",
-    //   title: "Backed by Nature. Proven by Science.",
-    //   description:
-    //     "Every formula begins where real healing starts — in nature's own medicine cabinet. We source pure, potent herbs grown in rich African soil and blend them to awaken your body's natural power to heal and renew.",
-    // },
-    // {
-    //   image: "/dietary-supplements.png",
-    //   title: "Pure Ingredients. Real Results.",
-    //   description:
-    //     "We don't guess — we prove. Each product is guided by research, tested for results, and refined through modern science so you can trust every dose to do exactly what it says.",
-    // },
-    // {
-    //   image: "/health-wellness.png",
-    //   title: "Honesty. Integrity. Wellness.",
-    //   description:
-    //     "No gimmicks. No shortcuts. No empty promises. Just honest wellness — rooted in integrity, crafted with care, and designed to help you feel your best, naturally.",
-    // },
-    // {
-    //   image: "/dietary-supplements.png",
-    //   title: "Wellness That's Truly Felt.",
-    //   description:
-    //     "Because you deserve wellness that's not just talked about… but truly felt. Experience the difference that natural, science-backed nutrition can make in your life.",
-    // },
   ]
 
   useEffect(() => {

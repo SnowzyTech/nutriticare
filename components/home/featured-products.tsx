@@ -45,13 +45,13 @@ export function FeaturedProducts() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product, index) => (
               <Link key={product.id} href={`/shop/${product.slug}`}>
                 <div
                   className={`group relative rounded-lg overflow-hidden hover:shadow-2xl border bg-background transition-all duration-300 cursor-pointer h-full flex flex-col animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
                 >
-                  <div className="relative md:h-[320px] h-[300px] overflow-hidden">
+                  <div className="relative md:h-[320px] h-[350px] overflow-hidden">
                     <div
                       className={`w-full h-full ${cardColors[index % cardColors.length]} transition-transform duration-500 ease-out`}
                       style={{

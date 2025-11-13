@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { MessageCircle, X, Send } from "lucide-react"
@@ -16,6 +17,7 @@ interface Message {
 }
 
 export function ChatbotWidget() {
+  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -29,6 +31,20 @@ export function ChatbotWidget() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const isAdminRoute = pathname?.startsWith("/admin")
+
+  useEffect(() => {
+    if (isOpen && !isAdminRoute) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset"
+    }
+
+    return () => {
+      document.body.style.overflow = "unset"
+    }
+  }, [isOpen, isAdminRoute])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -93,6 +109,10 @@ export function ChatbotWidget() {
     }
   }
 
+  if (isAdminRoute) {
+    return null
+  }
+
   return (
     <>
       {/* Chat Widget Button */}
@@ -125,7 +145,7 @@ export function ChatbotWidget() {
                     "max-w-xs px-4 py-2 rounded-lg text-sm",
                     message.role === "user"
                       ? "bg-primary text-primary-foreground rounded-br-none"
-                      : "bg-muted text-foreground rounded-bl-none",
+                      : "bg-primary/30 text-foreground rounded-bl-none",
                   )}
                 >
                   {message.content}

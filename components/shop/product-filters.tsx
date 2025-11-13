@@ -113,23 +113,7 @@ export function ProductFilters({ onCategoryChange, onPriceChange }: ProductFilte
         )}
       </div>
 
-      {/* Dietary Needs */}
-      <div className="bg-card rounded-lg p-4">
-        <button onClick={() => toggleSection("dietary")} className="flex items-center justify-between w-full mb-4">
-          <h3 className="font-semibold text-foreground">Dietary Needs</h3>
-          <ChevronDown className={`w-4 h-4 transition ${expandedSections.dietary ? "rotate-180" : ""}`} />
-        </button>
-        {expandedSections.dietary && (
-          <div className="space-y-3">
-            {dietary.map((diet) => (
-              <label key={diet} className="flex items-center gap-3 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 rounded border-border bg-background" />
-                <span className="text-sm text-muted-foreground hover:text-foreground">{diet}</span>
-              </label>
-            ))}
-          </div>
-        )}
-      </div>
+     
     </div>
   )
 }

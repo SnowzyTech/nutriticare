@@ -3,12 +3,12 @@
 import type React from "react"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from 'next/navigation'
 import { createBrowserClient } from "@supabase/ssr"
 import { AdminSidebar } from "@/components/admin/sidebar"
 import { AdminHeader } from "@/components/admin/header"
 import { Button } from "@/components/ui/button"
-import { Plus, Edit, Trash2, Search, Star } from "lucide-react"
+import { Plus, Edit, Trash2, Search, Star } from 'lucide-react'
 import { updateTestimonial, deleteTestimonial } from "@/lib/server-actions"
 import {
   Dialog,
@@ -46,6 +46,7 @@ export default function AdminTestimonialsPage() {
   const [showDialog, setShowDialog] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
+  const [csrfToken, setCsrfToken] = useState<string>("")
   const [formData, setFormData] = useState({
     product_id: "",
     customer_name: "",
@@ -70,6 +71,7 @@ export default function AdminTestimonialsPage() {
         router.push("/admin/login")
       } else {
         setIsAuthenticated(true)
+        fetchCSRFToken()
         fetchTestimonials()
         fetchProducts()
       }
@@ -77,6 +79,16 @@ export default function AdminTestimonialsPage() {
 
     checkAuth()
   }, [router])
+
+  const fetchCSRFToken = async () => {
+    try {
+      const response = await fetch("/api/csrf-token")
+      const data = await response.json()
+      setCsrfToken(data.token)
+    } catch (error) {
+      console.error("Failed to fetch CSRF token:", error)
+    }
+  }
 
   useEffect(() => {
     const filtered = testimonials.filter(
@@ -165,17 +177,26 @@ export default function AdminTestimonialsPage() {
     try {
       if (editingId) {
         await updateTestimonial(editingId, {
-          name: formData.customer_name,
-          comment: formData.customer_text,
+          customer_name: formData.customer_name,
+          customer_text: formData.customer_text,
+          customer_image: formData.customer_image,
+          product_id: formData.product_id,
           rating: formData.rating,
         })
       } else {
-        // Public testimonial creation - allowed without admin auth
-        await fetch("/api/testimonials/create", {
+        const response = await fetch("/api/testimonials/create", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "x-csrf-token": csrfToken,
+          },
           body: JSON.stringify(formData),
         })
+
+        if (!response.ok) {
+          const error = await response.json()
+          throw new Error(error.error || "Failed to create testimonial")
+        }
       }
       fetchTestimonials()
       setShowDialog(false)
@@ -217,7 +238,7 @@ export default function AdminTestimonialsPage() {
             <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
               <button
                 onClick={() => router.push("/admin")}
-                className="md:hidden text-sm px-4 py-2 bg-background border border-border rounded-lg text-foreground hover:bg-background/80 transition"
+                className="md:hidden flex text-sm px-4 py-2 bg-background border border-border rounded-lg text-foreground hover:bg-background/80 transition"
               >
                 ← Back to Dashboard
               </button>

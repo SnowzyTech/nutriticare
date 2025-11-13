@@ -79,11 +79,11 @@ export default function AdminDashboard() {
             .limit(2),
         ])
 
-      console.log("[v0] Products count:", productsRes.count)
-      console.log("[v0] Orders count:", ordersRes.count)
-      console.log("[v0] Blogs count:", blogsRes.count)
-      console.log("[v0] Applications count:", applicationsRes.count)
-      console.log("[v0] Applications response:", applicationsRes)
+      console.log("Products count:", productsRes.count)
+      console.log("Orders count:", ordersRes.count)
+      console.log("Blogs count:", blogsRes.count)
+      console.log("Applications count:", applicationsRes.count)
+      console.log("Applications response:", applicationsRes)
 
       setStats({
         totalProducts: productsRes.count || 0,

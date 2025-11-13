@@ -65,21 +65,21 @@ export default function CartPage() {
                       <div className="flex items-center border border-border rounded-lg w-fit">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="px-3 py-2 text-muted-foreground hover:text-foreground"
+                          className="px-3 py-2 text-muted-foreground hover:text-foreground cursor-pointer"
                         >
                           <Minus className="w-4 h-4" />
                         </button>
                         <span className="px-4 py-2 text-foreground">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="px-3 py-2 text-muted-foreground hover:text-foreground"
+                          className="px-3 py-2 text-muted-foreground hover:text-foreground cursor-pointer"
                         >
                           <Plus className="w-4 h-4" />
                         </button>
                       </div>
                       <button
                         onClick={() => handleRemoveItem(item.id, item.name)}
-                        className="sm:ml-auto p-2 text-red-500 hover:bg-red-500/10 rounded transition w-fit"
+                        className="sm:ml-auto p-2 text-red-500 hover:bg-red-500/10 rounded transition w-fit cursor-pointer"
                       >
                         <Trash2 className="w-5 h-5" />
                       </button>
@@ -115,10 +115,10 @@ export default function CartPage() {
             </div>
 
             <Link href="/checkout">
-              <Button className="w-full bg-primary hover:bg-primary/90 py-3 mb-3">Proceed to Checkout</Button>
+              <Button className="w-full bg-primary hover:bg-primary/90 py-3 mb-3 cursor-pointer">Proceed to Checkout</Button>
             </Link>
 
-            <Button variant="outline" onClick={clearCart} className="w-full bg-transparent">
+            <Button variant="outline" onClick={clearCart} className="w-full bg-transparent cursor-pointer">
               Clear Cart
             </Button>
 

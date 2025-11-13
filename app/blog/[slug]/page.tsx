@@ -1,11 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
+import { useParams } from 'next/navigation'
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import type { BlogPost } from "@/lib/types"
-import { Facebook, Twitter, Linkedin } from "lucide-react"
+import { Facebook, Twitter, Linkedin } from 'lucide-react'
 
 export default function BlogPostPage() {
   const params = useParams()
@@ -23,23 +23,16 @@ export default function BlogPostPage() {
           throw new Error("Failed to fetch blog post")
         }
         const data = await response.json()
-        console.log("[v0] Fetched blog post:", data)
         setPost(data)
 
         const categoryParam = data.category ? `&category=${data.category}` : ""
-        console.log("[v0] Fetching related posts with category:", data.category)
         const relatedResponse = await fetch(`/api/blog?limit=6${categoryParam}`)
-        console.log("[v0] Related posts response status:", relatedResponse.status)
 
         if (relatedResponse.ok) {
           const relatedData = await relatedResponse.json()
-          console.log("[v0] Related posts data:", relatedData)
           // Filter out current post and limit to 3
           const filtered = relatedData.posts.filter((p: BlogPost) => p.id !== data.id).slice(0, 3)
-          console.log("[v0] Filtered related posts:", filtered)
           setRelatedPosts(filtered)
-        } else {
-          console.log("[v0] Related posts fetch failed with status:", relatedResponse.status)
         }
       } catch (error) {
         console.error("Failed to fetch blog post:", error)
@@ -59,9 +52,11 @@ export default function BlogPostPage() {
       <div className="min-h-screen bg-background">
         <Header />
         <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="animate-pulse space-y-4">
-            <div className="h-96 bg-card rounded-lg" />
-            <div className="h-12 bg-card rounded-lg w-2/3" />
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="animate-spin mb-4">
+              <div className="w-12 h-12 border-4 border-border border-t-primary rounded-full"></div>
+            </div>
+            <p className="text-muted-foreground">Loading article...</p>
           </div>
         </main>
         <Footer />

@@ -70,11 +70,7 @@ export function Footer() {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link href="#" className="text-muted-foreground hover:text-primary text-sm">
-                  FAQ
-                </Link>
-              </li>
+              
             </ul>
           </div>
 

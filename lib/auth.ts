@@ -8,20 +8,21 @@ export async function requireAdminAuth() {
   const supabase = await getSupabaseServer()
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
 
-  if (!session) {
-    throw new Error("Unauthorized: No session found")
+  if (authError || !user) {
+    throw new Error("Unauthorized: No authenticated user found")
   }
 
-  const { data: userData, error } = await supabase.from("users").select("is_admin").eq("id", session.user.id).single()
+  const { data: userData, error } = await supabase.from("users").select("is_admin").eq("id", user.id).single()
 
   if (error || !userData?.is_admin) {
     throw new Error("Unauthorized: Admin access required")
   }
 
-  return session.user
+  return user
 }
 
 /**
@@ -31,12 +32,13 @@ export async function getCurrentUser() {
   const supabase = await getSupabaseServer()
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
 
-  if (!session) {
+  if (error || !user) {
     return null
   }
 
-  return session.user
+  return user
 }

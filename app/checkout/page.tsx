@@ -304,7 +304,7 @@ export default function CheckoutPage() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/90 py-3">
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90 py-3 cursor-pointer">
                   Continue to Payment
                 </Button>
               </form>
@@ -338,7 +338,7 @@ export default function CheckoutPage() {
                     <Button
                       type="submit"
                       disabled={loading}
-                      className="flex-1 bg-primary hover:bg-primary/90 gap-2 py-3"
+                      className="flex-1 bg-primary hover:bg-primary/90 gap-2 py-3 cursor-pointer"
                     >
                       {loading ? (
                         <>

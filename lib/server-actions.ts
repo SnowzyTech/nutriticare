@@ -204,14 +204,14 @@ export async function deleteProduct(productId: string) {
 
 // TESTIMONIAL ACTIONS
 export async function createTestimonial(formData: {
-  name: string
-  comment: string
+  product_id: string
+  customer_name: string
+  customer_text: string
+  customer_image?: string
   rating: number
-  product_id?: string
 }) {
-  // Testimonials can be public
-  if (!formData.name || !formData.comment) {
-    throw new Error("Missing required fields: name, comment")
+  if (!formData.product_id || !formData.customer_name || !formData.customer_text) {
+    throw new Error("Missing required fields: product_id, customer_name, customer_text")
   }
 
   const supabase = await getSupabaseServer()
@@ -220,10 +220,11 @@ export async function createTestimonial(formData: {
     .from("testimonials")
     .insert([
       {
-        name: formData.name,
-        comment: formData.comment,
-        rating: formData.rating || 5,
         product_id: formData.product_id,
+        customer_name: formData.customer_name,
+        customer_text: formData.customer_text,
+        customer_image: formData.customer_image || "/woman-avatar-3.png",
+        rating: formData.rating || 5,
         created_at: new Date().toISOString(),
       },
     ])
@@ -238,7 +239,13 @@ export async function createTestimonial(formData: {
 
 export async function updateTestimonial(
   testimonialId: string,
-  formData: { name: string; comment: string; rating: number },
+  formData: {
+    customer_name: string
+    customer_text: string
+    customer_image: string
+    product_id: string
+    rating: number
+  },
 ) {
   await requireAdminAuth()
 
@@ -247,8 +254,10 @@ export async function updateTestimonial(
   const { data, error } = await supabase
     .from("testimonials")
     .update({
-      name: formData.name,
-      comment: formData.comment,
+      customer_name: formData.customer_name,
+      customer_text: formData.customer_text,
+      customer_image: formData.customer_image,
+      product_id: formData.product_id,
       rating: formData.rating,
     })
     .eq("id", testimonialId)
