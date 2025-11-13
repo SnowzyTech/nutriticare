@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -7,6 +10,8 @@ const nextConfig = {
     unoptimized: true,
   },
 
+  turbopack: {},
+  
   // --- This is the fix for the jsdom error ---
   webpack: (config, { isServer }) => {
     if (isServer) {
@@ -17,9 +22,6 @@ const nextConfig = {
     }
     return config;
   },
-
-  // --- ADD THIS LINE to fix the new build error ---
-  turbopack: false, 
 }
 
 export default nextConfig

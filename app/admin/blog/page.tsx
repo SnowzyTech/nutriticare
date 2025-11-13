@@ -8,7 +8,7 @@ import { createBrowserClient } from "@supabase/ssr"
 import { AdminSidebar } from "@/components/admin/sidebar"
 import { AdminHeader } from "@/components/admin/header"
 import { Button } from "@/components/ui/button"
-import { Plus, Edit, Trash2, Search, X } from "lucide-react"
+import { Plus, Edit, Trash2, Search, X, ChevronLeft, ChevronRight } from "lucide-react"
 import type { BlogPost } from "@/lib/types"
 import { createBlogPost, updateBlogPost, deleteBlogPost } from "@/lib/server-actions"
 import {
@@ -34,6 +34,8 @@ export default function AdminBlogPage() {
   const [editingSlug, setEditingSlug] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 4
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -74,6 +76,7 @@ export default function AdminBlogPage() {
         post.category.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     setFilteredPosts(filtered)
+    setCurrentPage(1)
   }, [searchQuery, blogPosts])
 
   const fetchBlogPosts = async () => {
@@ -214,6 +217,10 @@ export default function AdminBlogPage() {
     return null
   }
 
+  const totalPages = Math.ceil(filteredPosts.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const paginatedPosts = filteredPosts.slice(startIndex, startIndex + itemsPerPage)
+
   return (
     <div className="flex h-screen bg-background">
       <AdminSidebar />
@@ -259,67 +266,95 @@ export default function AdminBlogPage() {
               {searchQuery ? "No blog posts match your search" : "No blog posts found. Create your first post!"}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPosts.map((post) => (
-                <div
-                  key={post.id}
-                  className="bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg transition"
-                >
-                  {/* Featured Image */}
-                  <div className="h-48 bg-gradient-to-br from-primary/20 to-primary/10 overflow-hidden">
-                    {post.featured_image ? (
-                      <img
-                        src={post.featured_image || "/placeholder.svg"}
-                        alt={post.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                        No image
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                {paginatedPosts.map((post) => (
+                  <div
+                    key={post.id}
+                    className="bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg transition"
+                  >
+                    {/* Featured Image */}
+                    <div className="h-48 bg-gradient-to-br from-primary/20 to-primary/10 overflow-hidden">
+                      {post.featured_image ? (
+                        <img
+                          src={post.featured_image || "/placeholder.svg"}
+                          alt={post.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                          No image
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Post Info */}
+                    <div className="p-4">
+                      <h3 className="font-semibold text-foreground mb-2 line-clamp-2">{post.title}</h3>
+                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{post.excerpt}</p>
+
+                      {/* Category and Status */}
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-xs px-2 py-1 rounded bg-background text-muted-foreground">
+                          {post.category}
+                        </span>
+                        <span
+                          className={`text-xs px-2 py-1 rounded ${
+                            post.published ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"
+                          }`}
+                        >
+                          {post.published ? "Published" : "Draft"}
+                        </span>
                       </div>
-                    )}
-                  </div>
 
-                  {/* Post Info */}
-                  <div className="p-4">
-                    <h3 className="font-semibold text-foreground mb-2 line-clamp-2">{post.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{post.excerpt}</p>
-
-                    {/* Category and Status */}
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-xs px-2 py-1 rounded bg-background text-muted-foreground">
-                        {post.category}
-                      </span>
-                      <span
-                        className={`text-xs px-2 py-1 rounded ${
-                          post.published ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"
-                        }`}
-                      >
-                        {post.published ? "Published" : "Draft"}
-                      </span>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleEdit(post)}
-                        className="flex-1 p-2 cursor-pointer border border-border hover:bg-background rounded transition flex items-center justify-center gap-2"
-                      >
-                        <Edit className="w-4 h-4 text-primary" />
-                        <span className="text-sm">Edit</span>
-                      </button>
-                      <button
-                        onClick={() => handleDelete(post.slug)}
-                        className="flex-1 p-2 cursor-pointer bg-primary/70  hover:bg-primary/85 border border-border rounded transition flex items-center justify-center gap-2"
-                      >
-                        <Trash2 className="w-4 h-4 text-red-500 " />
-                        <span className="text-sm">Delete</span>
-                      </button>
+                      {/* Actions */}
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleEdit(post)}
+                          className="flex-1 p-2 cursor-pointer border border-border hover:bg-background rounded transition flex items-center justify-center gap-2"
+                        >
+                          <Edit className="w-4 h-4 text-primary" />
+                          <span className="text-sm">Edit</span>
+                        </button>
+                        <button
+                          onClick={() => handleDelete(post.slug)}
+                          className="flex-1 p-2 cursor-pointer bg-primary/70  hover:bg-primary/85 border border-border rounded transition flex items-center justify-center gap-2"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-500 " />
+                          <span className="text-sm">Delete</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between mt-8 p-4 bg-card rounded-lg border border-border">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-foreground hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous
+                  </button>
+
+                  <div className="text-sm text-muted-foreground">
+                    Page {currentPage} of {totalPages}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-foreground hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
 
           <Dialog open={showImagePreview} onOpenChange={setShowImagePreview}>

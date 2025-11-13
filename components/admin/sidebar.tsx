@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { LayoutDashboard, Package, FileText, ShoppingCart, LogOut, Heart, Menu, X, Briefcase } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { getSupabaseClient } from "@/lib/supabase-client"
 
 export function AdminSidebar() {
@@ -19,6 +19,18 @@ export function AdminSidebar() {
     { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
     { href: "/admin/applications", label: "Applications", icon: Briefcase },
   ]
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset"
+    }
+
+    return () => {
+      document.body.style.overflow = "unset"
+    }
+  }, [isOpen])
 
   const handleLogout = async () => {
     const supabase = getSupabaseClient()
@@ -37,7 +49,7 @@ export function AdminSidebar() {
       </button>
 
       <aside
-        className={`fixed lg:sticky top-0 left-0 h-screen w-64 bg-card border-r border-border flex flex-col transition-transform duration-300 z-40 ${
+        className={`fixed lg:sticky top-0 left-0 h-full md:h-screen w-64 bg-card border-r border-border flex flex-col transition-transform duration-300 z-40 ${
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >

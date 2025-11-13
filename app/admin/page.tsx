@@ -6,7 +6,7 @@ import { createBrowserClient } from "@supabase/ssr"
 import { AdminSidebar } from "@/components/admin/sidebar"
 import { AdminHeader } from "@/components/admin/header"
 import { StatsCard } from "@/components/admin/stats-card"
-import { Package, ShoppingCart, FileText } from "lucide-react"
+import { Package, ShoppingCart, FileText, Briefcase } from "lucide-react"
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -15,6 +15,7 @@ export default function AdminDashboard() {
     totalProducts: 0,
     totalOrders: 0,
     totalBlogs: 0,
+    totalApplications: 0,
   })
   const [topProducts, setTopProducts] = useState<any[]>([])
   const [topBlogs, setTopBlogs] = useState<any[]>([])
@@ -59,34 +60,43 @@ export default function AdminDashboard() {
 
   const fetchStats = async (supabase: any) => {
     try {
-      const [productsRes, ordersRes, blogsRes, topProductsRes, topBlogsRes, topOrdersRes] = await Promise.all([
-        supabase.from("products").select("id", { count: "exact", head: true }),
-        supabase.from("orders").select("id", { count: "exact", head: true }),
-        supabase.from("blog_posts").select("id", { count: "exact", head: true }),
-        supabase.from("products").select("*").order("created_at", { ascending: false }).limit(4),
-        supabase
-          .from("blog_posts")
-          .select("id, title, slug, category, created_at")
-          .order("created_at", { ascending: false })
-          .limit(3),
-        supabase
-          .from("orders")
-          .select("id, total_amount, status, created_at, shipping_address")
-          .order("created_at", { ascending: false })
-          .limit(2),
-      ])
+      const [productsRes, ordersRes, blogsRes, applicationsRes, topProductsRes, topBlogsRes, topOrdersRes] =
+        await Promise.all([
+          supabase.from("products").select("id", { count: "exact", head: true }),
+          supabase.from("orders").select("id", { count: "exact", head: true }),
+          supabase.from("blog_posts").select("id", { count: "exact", head: true }),
+          supabase.from("job_applications").select("id", { count: "exact", head: true }),
+          supabase.from("products").select("*").order("created_at", { ascending: false }).limit(4),
+          supabase
+            .from("blog_posts")
+            .select("id, title, slug, category, created_at")
+            .order("created_at", { ascending: false })
+            .limit(3),
+          supabase
+            .from("orders")
+            .select("id, total_amount, status, created_at, shipping_address")
+            .order("created_at", { ascending: false })
+            .limit(2),
+        ])
+
+      console.log("[v0] Products count:", productsRes.count)
+      console.log("[v0] Orders count:", ordersRes.count)
+      console.log("[v0] Blogs count:", blogsRes.count)
+      console.log("[v0] Applications count:", applicationsRes.count)
+      console.log("[v0] Applications response:", applicationsRes)
 
       setStats({
         totalProducts: productsRes.count || 0,
         totalOrders: ordersRes.count || 0,
         totalBlogs: blogsRes.count || 0,
+        totalApplications: applicationsRes.count || 0,
       })
 
       setTopProducts(topProductsRes.data || [])
       setTopBlogs(topBlogsRes.data || [])
       setTopOrders(topOrdersRes.data || [])
     } catch (error) {
-      console.error("Failed to fetch stats:", error)
+      console.error("[v0] Failed to fetch stats:", error)
     } finally {
       setLoading(false)
     }
@@ -112,10 +122,16 @@ export default function AdminDashboard() {
           <h1 className="text-4xl font-bold text-foreground mb-8">Dashboard</h1>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <StatsCard label="Total Products" value={stats.totalProducts.toString()} icon={Package} trend={0} />
             <StatsCard label="Total Orders" value={stats.totalOrders.toString()} icon={ShoppingCart} trend={0} />
             <StatsCard label="Total Blogs" value={stats.totalBlogs.toString()} icon={FileText} trend={0} />
+            <StatsCard
+              label="Total Applications"
+              value={stats.totalApplications.toString()}
+              icon={Briefcase}
+              trend={0}
+            />
           </div>
 
           {/* Content Grid */}

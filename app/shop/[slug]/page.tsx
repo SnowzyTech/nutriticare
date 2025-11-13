@@ -35,6 +35,7 @@ export default function ProductPage() {
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"description">("description")
   const [testimonialScroll, setTestimonialScroll] = useState(0)
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -78,6 +79,22 @@ export default function ProductPage() {
       fetchProduct()
     }
   }, [slug])
+
+  useEffect(() => {
+    if (testimonials.length === 0) return
+
+    const interval = setInterval(() => {
+      setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length)
+      // Scroll to next testimonial
+      const container = document.getElementById("testimonials-container")
+      if (container) {
+        const scrollAmount = 320
+        container.scrollBy({ left: scrollAmount, behavior: "smooth" })
+      }
+    }, 5000) // 5 seconds
+
+    return () => clearInterval(interval)
+  }, [testimonials.length])
 
   const handleAddToCart = () => {
     if (product) {
@@ -344,15 +361,15 @@ export default function ProductPage() {
               <>
                 <button
                   onClick={() => scrollTestimonials("left")}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-primary hover:bg-primary/90 rounded-full p-2 transition-colors"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-primary hover:bg-primary/90 rounded-full md:p-2 p-1 ml-2 transition-colors"
                 >
-                  <ChevronLeft className="w-5 h-5 text-foreground" />
+                  <ChevronLeft className="md:w-5 w-4 h-4 md:h-5 text-foreground" />
                 </button>
                 <button
                   onClick={() => scrollTestimonials("right")}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-primary hover:bg-primary/90 rounded-full p-2 transition-colors"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-primary hover:bg-primary/90 rounded-full md:p-2 p-1 mr-2 transition-colors"
                 >
-                  <ChevronRight className="w-5 h-5 text-foreground" />
+                  <ChevronRight className="md:w-5 w-4 h-4 md:h-5 text-foreground" />
                 </button>
               </>
             )}
@@ -362,7 +379,7 @@ export default function ProductPage() {
         <div>
           <h2 className="text-2xl font-bold text-foreground mb-8">You Might Also Like</h2>
           {relatedProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((relatedProduct) => (
                 <a
                   key={relatedProduct.id}

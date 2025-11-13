@@ -6,7 +6,7 @@ import { createBrowserClient } from "@supabase/ssr"
 import { AdminSidebar } from "@/components/admin/sidebar"
 import { AdminHeader } from "@/components/admin/header"
 import type { Order } from "@/lib/types"
-import { Search, X } from "lucide-react"
+import { Search, X, ChevronLeft, ChevronRight } from "lucide-react"
 
 export default function AdminOrdersPage() {
   const router = useRouter()
@@ -18,6 +18,9 @@ export default function AdminOrdersPage() {
 
   const [searchQuery, setSearchQuery] = useState("")
   const [timeFilter, setTimeFilter] = useState<"all" | "week" | "month" | "year">("all")
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 4
 
   useEffect(() => {
     const supabase = createBrowserClient(
@@ -85,11 +88,16 @@ export default function AdminOrdersPage() {
     }
 
     setFilteredOrders(filtered)
+    setCurrentPage(1)
   }, [orders, searchQuery, timeFilter])
 
   if (!isAuthenticated) {
     return null
   }
+
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const paginatedOrders = filteredOrders.slice(startIndex, startIndex + itemsPerPage)
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -209,7 +217,7 @@ export default function AdminOrdersPage() {
 
             {/* Filter Info */}
             <div className="text-sm text-muted-foreground">
-              Showing {filteredOrders.length} of {orders.length} orders
+              Showing {paginatedOrders.length} of {filteredOrders.length} orders
               {(searchQuery || timeFilter !== "all") && " (filtered)"}
             </div>
           </div>
@@ -221,65 +229,93 @@ export default function AdminOrdersPage() {
               {orders.length === 0 ? "No orders found yet." : "No orders match your filters."}
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-6">
-              {filteredOrders.map((order) => (
-                <div
-                  key={order.id}
-                  className="bg-card rounded-lg border border-border p-6 hover:border-primary transition cursor-pointer"
-                  onClick={() => setSelectedOrder(selectedOrder?.id === order.id ? null : order)}
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Order ID</p>
-                      <p className="text-foreground font-semibold">#{order.id.slice(0, 8)}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Customer</p>
-                      <p className="text-foreground font-medium">{getCustomerName(order)}</p>
-                      <p className="text-xs text-muted-foreground">{getCustomerEmail(order)}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Amount</p>
-                      <p className="text-foreground font-semibold">₦{order.total_amount.toFixed(2)}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Status</p>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                        {order.status}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Date</p>
-                      <p className="text-foreground text-sm">{new Date(order.created_at).toLocaleDateString()}</p>
-                    </div>
-                  </div>
-
-                  {selectedOrder?.id === order.id && (
-                    <div className="mt-6 pt-6 border-t border-border">
-                      <h3 className="text-sm font-semibold text-foreground mb-4">Customer Details</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-xs text-muted-foreground">Phone</p>
-                          <p className="text-foreground">{getCustomerPhone(order)}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Email</p>
-                          <p className="text-foreground">{getCustomerEmail(order)}</p>
-                        </div>
-                        <div className="md:col-span-2">
-                          <p className="text-xs text-muted-foreground">Delivery Address</p>
-                          <p className="text-foreground">{getCustomerAddress(order)}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Payment Method</p>
-                          <p className="text-foreground capitalize">{order.payment_method}</p>
-                        </div>
+            <>
+              <div className="grid grid-cols-1 gap-6 mb-6">
+                {paginatedOrders.map((order) => (
+                  <div
+                    key={order.id}
+                    className="bg-card rounded-lg border border-border p-6 hover:border-primary transition cursor-pointer"
+                    onClick={() => setSelectedOrder(selectedOrder?.id === order.id ? null : order)}
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Order ID</p>
+                        <p className="text-foreground font-semibold">#{order.id.slice(0, 8)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Customer</p>
+                        <p className="text-foreground font-medium">{getCustomerName(order)}</p>
+                        <p className="text-xs text-muted-foreground">{getCustomerEmail(order)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Amount</p>
+                        <p className="text-foreground font-semibold">₦{order.total_amount.toFixed(2)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Status</p>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                          {order.status}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Date</p>
+                        <p className="text-foreground text-sm">{new Date(order.created_at).toLocaleDateString()}</p>
                       </div>
                     </div>
-                  )}
+
+                    {selectedOrder?.id === order.id && (
+                      <div className="mt-6 pt-6 border-t border-border">
+                        <h3 className="text-sm font-semibold text-foreground mb-4">Customer Details</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-xs text-muted-foreground">Phone</p>
+                            <p className="text-foreground">{getCustomerPhone(order)}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Email</p>
+                            <p className="text-foreground">{getCustomerEmail(order)}</p>
+                          </div>
+                          <div className="md:col-span-2">
+                            <p className="text-xs text-muted-foreground">Delivery Address</p>
+                            <p className="text-foreground">{getCustomerAddress(order)}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground">Payment Method</p>
+                            <p className="text-foreground capitalize">{order.payment_method}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between mt-8 p-4 bg-card rounded-lg border border-border">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-foreground hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous
+                  </button>
+
+                  <div className="text-sm text-muted-foreground">
+                    Page {currentPage} of {totalPages}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-foreground hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </div>
       </main>

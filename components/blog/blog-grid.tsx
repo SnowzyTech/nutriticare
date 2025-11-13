@@ -57,7 +57,7 @@ export function BlogGrid({ category, search, page = 1 }: BlogGridProps) {
               className={`bg-card rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer h-full flex flex-col group animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
             >
               <div
-                className="h-48 bg-gradient-to-br from-primary/20 to-primary/10 group-hover:scale-105 transition"
+                className="md:h-60 h-56 bg-gradient-to-br from-primary/20 to-primary/10 group-hover:scale-105 transition"
                 style={{
                   backgroundImage: `url(${post.featured_image || "/health-wellness.png"})`,
                   backgroundSize: "cover",

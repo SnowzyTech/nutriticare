@@ -36,7 +36,7 @@ export function FeaturedProducts() {
   return (
     <section className="py-16 mb-16 bg-gradient-to-r from-primary/10 to-primary/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Explore What we Have...</h2>
+        <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Explore Our Shop.</h2>
 
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -45,7 +45,7 @@ export function FeaturedProducts() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product, index) => (
               <Link key={product.id} href={`/shop/${product.slug}`}>
                 <div

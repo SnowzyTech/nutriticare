@@ -23,9 +23,9 @@ export default function AboutPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <section ref={heroRef.ref} className={`${heroRef.isVisible ? "animate-slide-in-down" : "opacity-0"} mb-10`}>
-          <div className="bg-gradient-to-r from-primary/20 to-primary/10 rounded-lg p-12 text-center">
-            <h1 className="text-4xl font-bold text-foreground mb-4">Our Story – Rooted in Nature. Refined by Care.</h1>
-            <p className="text-lg text-muted-foreground"></p>
+          <div className="bg-gradient-to-r from-primary/20 to-primary/10 rounded-lg md:p-12 p-6 text-center">
+            <h1 className="md:text-4xl text-[25px] font-bold text-foreground mb-4">Our Story – "Rooted in Nature. Refined by Care".</h1>
+      
           </div>
         </section>
 

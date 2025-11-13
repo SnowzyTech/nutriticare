@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { CartProvider } from "@/lib/cart-context"
 import { Toaster } from "@/components/ui/toaster"
+import { ChatbotWidget } from "@/components/chatbot-widget"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -34,6 +35,7 @@ export default function RootLayout({
           {children}
           <Toaster />
           <Analytics />
+          <ChatbotWidget />
         </CartProvider>
       </body>
     </html>

@@ -247,7 +247,7 @@ export default function AdminProductsPage() {
       <main className="flex-1 overflow-auto flex flex-col">
         <AdminHeader />
 
-        <div className="p-4 md:p-8">
+        <div className="p-4 md:p-8 mt-20">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
               <button

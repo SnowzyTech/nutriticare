@@ -328,17 +328,18 @@ export default function AdminApplicationsPage() {
         <AdminHeader />
         <main className="flex-1 overflow-auto p-8">
           <div className="max-w-7xl mx-auto">
-            <Button variant="ghost" size="sm" className="mb-6" onClick={() => router.push("/admin")}>
+            <Button variant="ghost" size="sm" className="mb-6 cursor-pointer" onClick={() => router.push("/admin")}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Dashboard
             </Button>
 
-            <div className="mb-8 flex items-center justify-between">
+            <div className="flex flex-col md:flex-row items-start justify-between md:items-center gap-4 w-full md:w-auto mb-8">
               <div>
                 <h1 className="text-4xl font-bold text-foreground mb-2">Job Applications</h1>
                 <p className="text-muted-foreground">Review and manage job applications from candidates</p>
               </div>
               <Button
+                 className="bg-primary hover:bg-primary/90 gap-2 w-full md:w-auto cursor-pointer"
                 onClick={() => {
                   setEditingJob(null)
                   setNewJob({
