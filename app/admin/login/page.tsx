@@ -150,9 +150,9 @@ export default function AdminLoginPage() {
             </Button>
           </form>
 
-          <p className="text-center text-muted-foreground text-sm mt-6">
+          {/* <p className="text-center text-muted-foreground text-sm mt-6">
             Demo credentials: admin@nutriticare.com / admin@123
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

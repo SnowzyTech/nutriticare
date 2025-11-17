@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import type { Product } from "@/lib/types"
 import { Button } from "@/components/ui/button"
-import { Eye } from "lucide-react"
+import { Eye } from 'lucide-react'
 
 export function FeaturedProducts() {
   const [products, setProducts] = useState<Product[]>([])
@@ -51,7 +51,7 @@ export function FeaturedProducts() {
                 <div
                   className={`group relative rounded-lg overflow-hidden hover:shadow-2xl border bg-background transition-all duration-300 cursor-pointer h-full flex flex-col animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
                 >
-                  <div className="relative md:h-[320px] h-[350px] overflow-hidden">
+                  <div className="relative md:h-[390px] h-[350px] overflow-hidden">
                     <div
                       className={`w-full h-full ${cardColors[index % cardColors.length]} transition-transform duration-500 ease-out`}
                       style={{
@@ -60,6 +60,24 @@ export function FeaturedProducts() {
                         backgroundPosition: "center",
                       }}
                     />
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-lg">
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          backgroundImage: `url(${product.image_url || "/dietary-supplements.png"})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      />
+                      <div className="absolute  inset-0 bg-black/60" />
+                      <Button
+                        size="lg"
+                        className="relative top-0 cursor-pointer text-white z-10 transition-transform duration-300"
+                      >
+                        <Eye className="w-5 h-5 mr-2" />
+                        View Product
+                      </Button>
+                    </div>
                   </div>
                   <div className="p-4 flex-1 flex flex-col bg-card rounded-b-lg">
                     <h3 className="font-semibold text-foreground mb-2 line-clamp-2">{product.name}</h3>
@@ -80,25 +98,6 @@ export function FeaturedProducts() {
                         {/* <span className="text-sm text-muted-foreground">{product.rating.toFixed(1)}</span> */}
                       </div>
                     </div>
-                  </div>
-
-                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
-                    <div
-                      className="absolute inset-0 transform translate-y-[-100%] group-hover:translate-y-0 transition-transform duration-500 ease-out"
-                      style={{
-                        backgroundImage: `url(${product.image_url || "/dietary-supplements.png"})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-black/60" />
-                    <Button
-                      size="lg"
-                      className="relative cursor-pointer text-white z-10 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100"
-                    >
-                      <Eye className="w-5 h-5 mr-2" />
-                      View Product
-                    </Button>
                   </div>
                 </div>
               </Link>
