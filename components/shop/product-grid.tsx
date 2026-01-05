@@ -83,16 +83,16 @@ export function ProductGrid({ categories = [], search, page = 1, priceRange = [0
 
   return (
     <div>
-      <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-1">
+      <div className="grid grid-cols-1 xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-1">
         {products.map((product, index) => (
           <div
             key={product.id}
-            className={`bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg overflow-hidden hover:shadow-lg transition h-full flex flex-col group animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
+            className={`bg-gradient-to-br m-3 from-secondary/20 to-secondary/10 rounded-lg overflow-hidden hover:shadow-lg transition h-full flex flex-col group animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
           >
             <Link href={`/shop/${product.slug}`} className="flex-1 flex flex-col">
               <div className="relative h-full bg-gradient-to-br from-primary/20 to-primary/10 overflow-hidden">
                 <div
-                  className="w-full h-[200px] xs:h-[180px] sm:h-[240px] md:h-[280px] lg:h-[300px] group-hover:scale-105 transition"
+                  className="w-full h-[200px] xs:h-[280px] sm:h-[240px] md:h-[280px] lg:h-[300px] group-hover:scale-105 transition"
                   style={{
                     backgroundImage: `url(${product.image_url || "/dietary-supplements.png"})`,
                     backgroundSize: "cover",
@@ -111,7 +111,7 @@ export function ProductGrid({ categories = [], search, page = 1, priceRange = [0
                     {product.category}
                   </p>
                 )}
-                <h3 className="font-semibold text-sm sm:text-base text-foreground mb-1 sm:mb-2 line-clamp-2 group-hover:text-primary transition">
+                <h3 className="font-semibold text-sm sm:text-base text-foreground mb-1 sm:mb-2 line-clamp-2 group-hover:text-foreground transition">
                   {product.name}
                 </h3>
                 <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 flex-1 line-clamp-2">
@@ -119,7 +119,7 @@ export function ProductGrid({ categories = [], search, page = 1, priceRange = [0
                 </p>
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <div>
-                    <p className="text-base sm:text-lg font-bold text-primary">₦{product.price.toFixed(2)}</p>
+                    <p className="text-base sm:text-lg font-bold text-foreground">₦{product.price.toFixed(2)}</p>
                     {product.original_price && (
                       <p className="text-xs sm:text-sm text-muted-foreground line-through">
                         ₦{product.original_price.toFixed(2)}

@@ -42,7 +42,7 @@ export function BlogPreview() {
             {posts.map((post, index) => (
               <Link key={post.id} href={`/blog/${post.slug}`}>
                 <div
-                  className={`group relative rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer h-full flex flex-col border border-border animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
+                  className={`group relative bg-background rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer h-full flex flex-col border border-border animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
                 >
                   <div className="relative h-79 overflow-hidden">
                     <div

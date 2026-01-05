@@ -5,11 +5,12 @@ import { useParams } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import type { Product, Review } from "@/lib/types"
-import { Star, ShoppingCart, Heart, ChevronLeft, ChevronRight, Loader } from "lucide-react"
+import { Star, ShoppingCart, Heart, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/lib/cart-context"
 import { useToast } from "@/hooks/use-toast"
 import { getProductDescription } from "@/lib/product-descriptions"
+import { Spinner } from "@/components/ui/spinner"
 
 interface Testimonial {
   id: string
@@ -133,7 +134,7 @@ export default function ProductPage() {
         <Header />
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col items-center justify-center h-96">
-            <Loader className="w-12 h-12 text-primary animate-spin mb-4" />
+            <Spinner className="w-10 h-10 text-primary animate-spin mb-4" />
             <p className="text-muted-foreground text-lg">Loading product details...</p>
           </div>
         </main>
@@ -246,9 +247,7 @@ export default function ProductPage() {
                 <ShoppingCart className="w-4 sm:w-5 h-4 sm:h-5" />
                 Add to Cart
               </Button>
-              <Button variant="outline" size="icon" className="w-full sm:w-auto py-6 bg-transparent">
-                <Heart className="w-4 sm:w-5 h-4 sm:h-5" />
-              </Button>
+              
             </div>
 
             {/* Stock Status */}
@@ -281,7 +280,7 @@ export default function ProductPage() {
 
         <div className="prose prose-invert max-w-none mb-16">
           {activeTab === "description" && (
-            <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+            <p className="text-foreground/80 leading-relaxed whitespace-pre-line">
               {product.description || "No description available"}
             </p>
           )}
@@ -322,14 +321,23 @@ export default function ProductPage() {
           <div className="relative">
             <div
               id="testimonials-container"
-              className="flex gap-6 overflow-x-auto pb-4 scroll-smooth"
-              style={{ scrollBehavior: "smooth" }}
+              className="flex gap-6 overflow-x-auto pb-6 scroll-smooth scrollbar-hide"
+              style={{
+                scrollBehavior: "smooth",
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+              }}
             >
+              <style jsx>{`
+                #testimonials-container::-webkit-scrollbar {
+                  display: none;
+                }
+              `}</style>
               {testimonials.length > 0 ? (
                 testimonials.map((testimonial) => (
                   <div
                     key={testimonial.id}
-                    className="flex-shrink-0 w-80 bg-card rounded-lg p-6 border border-border hover:border-primary transition-colors"
+                    className="flex-shrink-0 w-80 bg-card rounded-lg p-6  hover:border-primary transition-colors shadow-sm"
                   >
                     <div className="flex items-center gap-4 mb-4">
                       {/* <img
@@ -338,7 +346,7 @@ export default function ProductPage() {
                         className="w-16 h-16 rounded-full object-cover"
                       /> */}
                       <div>
-                        <h3 className="font-semibold text-foreground">{testimonial.customer_name}</h3>
+                        
                         <div className="flex gap-1">
                           {[...Array(5)].map((_, i) => (
                             <Star key={i} className="w-4 h-4 fill-primary text-primary" />
@@ -347,6 +355,8 @@ export default function ProductPage() {
                       </div>
                     </div>
                     <p className="text-muted-foreground leading-relaxed">{testimonial.customer_text}</p>
+
+                    <h3 className="font-semibold text-foreground text-end pt-5">{testimonial.customer_name}</h3>
                   </div>
                 ))
               ) : (
@@ -355,6 +365,8 @@ export default function ProductPage() {
                 </div>
               )}
             </div>
+
+          <div className="mt-6 md:mt-8 border-t border-primary-foreground" />
 
             {/* Navigation buttons for testimonials */}
             {testimonials.length > 0 && (
@@ -379,28 +391,31 @@ export default function ProductPage() {
         <div>
           <h2 className="text-2xl font-bold text-foreground mb-8">You Might Also Like</h2>
           {relatedProducts.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
               {relatedProducts.map((relatedProduct) => (
                 <a
                   key={relatedProduct.id}
                   href={`/shop/${relatedProduct.slug}`}
-                  className="bg-card rounded-lg overflow-hidden border border-border hover:border-primary transition-colors group"
+                  className=" rounded-lg overflow-hidden  hover:border-primary transition-colors group"
                 >
                   <div
-                    className="h-48 bg-gradient-to-br from-primary/20 to-primary/10 group-hover:from-primary/30 group-hover:to-primary/20 transition-colors"
+                    className="h-90 bg-card group-hover:from-primary/30 group-hover:to-primary/20 transition-colors"
                     style={{
                       backgroundImage: `url(${relatedProduct.image_url})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
                   />
-                  <div className="p-4">
-                    <h3 className="font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                  <div className="pt-2 w-full">
+                    <div className="flex w-full items-center lg:gap-10 md:gap-22 gap-44 justify-center">
+
+                    <h3 className="font-semibold w-full lg:text-[22px] text-[20px] text-foreground mb-2 line-clamp-2  transition-colors">
                       {relatedProduct.name}
                     </h3>
-                    <p className="text-primary font-bold">₦{relatedProduct.price.toLocaleString()}</p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <div className="flex gap-1">
+                    <p className="text-primary text-[22px] lg:text-[22px] font-bold mb-2">₦{relatedProduct.price.toLocaleString()}</p>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2 ">
+                      <div className="flex gap-1 text-2xl">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
@@ -412,7 +427,7 @@ export default function ProductPage() {
                           />
                         ))}
                       </div>
-                      {/* <span className="text-xs text-muted-foreground">({relatedProduct.review_count})</span> */}
+                     
                     </div>
                   </div>
                 </a>
