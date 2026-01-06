@@ -11,9 +11,9 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "NutritiCare - Premium Health & Wellness Supplements",
+  title: "NutritiCare - Natural Herbal & Wellness Store",
   description:
-    "Transform your health with NutritiCare's premium, natural supplements. Shop for diabetic care, weight loss, kidney health, and more. Expertly formulated for maximum effectiveness.",
+    "Nutriticare is a specialised herbal and wellness store offering natural herbal and wellness products designed to support body balance and long-term wellbeing.  Shop Nutriticare for natural herbal teas and balms that support weight loss, blood-sugar balance, and everyday wellness. Fast delivery across Nigeria; pay on delivery..",
   keywords: [
     "nutritional supplements",
     "diabetic care",

@@ -12,6 +12,12 @@ const nextConfig = {
 
   turbopack: {},
   
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '5mb',
+    },
+  },
+
   // --- This is the fix for the jsdom error ---
   webpack: (config, { isServer }) => {
     if (isServer) {

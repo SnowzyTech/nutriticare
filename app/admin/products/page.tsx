@@ -117,6 +117,16 @@ export default function AdminProductsPage() {
   }
 
   const handleImageUpload = async (file: File) => {
+    const maxSize = 5 * 1024 * 1024 // 5MB
+    if (file.size > maxSize) {
+      toast({
+        title: "Error",
+        description: "Image size is too large. Upload an image smaller than 5MB",
+        variant: "destructive",
+      })
+      return null
+    }
+
     const formDataUpload = new FormData()
     formDataUpload.append("file", file)
 
@@ -126,12 +136,27 @@ export default function AdminProductsPage() {
         body: formDataUpload,
       })
       const data = await response.json()
+
+      if (!response.ok) {
+        toast({
+          title: "Error",
+          description: data.error || "Failed to upload image",
+          variant: "destructive",
+        })
+        return null
+      }
+
       if (data.url) {
         return data.url
       }
       return null
     } catch (error) {
       console.error("Image upload failed:", error)
+      toast({
+        title: "Error",
+        description: "Failed to upload image. Please try again.",
+        variant: "destructive",
+      })
       return null
     }
   }
@@ -147,11 +172,6 @@ export default function AdminProductsPage() {
       if (uploadedUrl) {
         imageUrl = uploadedUrl
       } else {
-        toast({
-          title: "Error",
-          description: "Failed to upload image",
-          variant: "destructive",
-        })
         return
       }
     }
@@ -516,6 +536,17 @@ export default function AdminProductsPage() {
                     onChange={(e) => {
                       const file = e.target.files?.[0]
                       if (file) {
+                        const maxSize = 5 * 1024 * 1024 // 5MB
+                        if (file.size > maxSize) {
+                          toast({
+                            title: "Error",
+                            description: "Image size is too large. Upload an image smaller than 5MB",
+                            variant: "destructive",
+                          })
+                          e.target.value = "" // Clear the input
+                          return
+                        }
+
                         setImageFile(file)
                         const reader = new FileReader()
                         reader.onload = (event) => {

@@ -13,7 +13,7 @@ export function HeroCarousel() {
   const slides = [
     {
       title: "Nature holds the blueprint for healing — not the labs",
-      subtitle: "PREMIUM HERBAL SOLUTIONS",
+      subtitle: "PREMIUM HEALTH SOLUTIONS",
       description:
         " When you give the body what it truly needs, it knows how to heal itself, and that’s why we create natural herbal blends (Products) that help your body detox, restore, and HEAL — from the inside out.",
       icon: <Leaf className="w-8 h-8 text-primary mb-4" />,

@@ -27,7 +27,8 @@ export async function POST(request: NextRequest) {
     })
 
     if (!validationResult.success) {
-      return NextResponse.json({ error: validationResult.error.errors[0].message }, { status: 400 })
+      const errorMessage = validationResult.error.errors[0]?.message || "Invalid file"
+      return NextResponse.json({ error: errorMessage }, { status: 400 })
     }
 
     const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, "").substring(0, 100)
@@ -36,8 +37,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid filename" }, { status: 400 })
     }
 
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+    
     const supabase = await getSupabaseAdmin()
-    const buffer = await file.arrayBuffer()
     const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}-${sanitizedFileName}`
 
     const { data, error } = await supabase.storage.from("images").upload(fileName, buffer, {
@@ -47,14 +50,23 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("[v0] Supabase upload error:", error)
-      return NextResponse.json({ error: "Failed to upload file" }, { status: 500 })
+      return NextResponse.json({ error: `Failed to upload file: ${error.message}` }, { status: 500 })
     }
 
-    const { data: publicData } = supabase.storage.from("images").getPublicUrl(fileName)
+    const { data: publicUrlData } = supabase.storage.from("images").getPublicUrl(fileName)
 
-    return NextResponse.json({ url: publicData.publicUrl }, { status: 200 })
+    if (!publicUrlData?.publicUrl) {
+      console.error("[v0] Failed to get public URL for uploaded file")
+      return NextResponse.json({ error: "Failed to get public URL" }, { status: 500 })
+    }
+
+    return NextResponse.json({ url: publicUrlData.publicUrl }, { status: 200 })
   } catch (error) {
     console.error("[v0] Upload error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    if (error instanceof Error && error.message.includes("body size")) {
+      return NextResponse.json({ error: "Image size is too large. Upload an image smaller than 5MB" }, { status: 413 })
+    }
+    const errorMessage = error instanceof Error ? error.message : "Internal server error"
+    return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }

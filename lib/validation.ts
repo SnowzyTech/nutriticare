@@ -59,7 +59,7 @@ export const commentSchema = z.object({
 // Validate file upload
 export const fileUploadSchema = z.object({
   file: z.object({
-    size: z.number().max(5 * 1024 * 1024, "File must be less than 5MB"),
+    size: z.number().max(5 * 1024 * 1024, "Image size is too large. Upload an image smaller than 5MB"),
     type: z.enum(["image/jpeg", "image/png", "image/webp"], {
       errorMap: () => ({ message: "Only JPEG, PNG, and WebP images are allowed" }),
     }),

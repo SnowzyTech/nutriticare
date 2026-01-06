@@ -27,7 +27,7 @@ export function BlogPreview() {
   }, [])
 
   return (
-    <section className="py-16 mb-16 bg-card">
+    <section className="py-16 mb-0 bg-card">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <h2 className="text-3xl font-bold text-foreground mb-12 text-center">From Our Blog</h2>
 

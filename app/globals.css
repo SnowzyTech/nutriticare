@@ -3,9 +3,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-
-
-
 :root {
   /* Refined color system: #ce1280 for buttons/links, #003798 for primary background, and a complementary lighter blue-gray for secondary backgrounds */
 
@@ -146,7 +143,7 @@
 }
 
 @layer utilities {
-  /* Updated animations to use CSS transitions for smooth slide-in effects */
+  /* added smooth slide-in animation keyframes for entrance effects */
   @keyframes slideInUp {
     from {
       opacity: 0;
@@ -207,7 +204,7 @@
     animation: slideInRight 0.8s ease-out forwards;
   }
 
-  /* Added stagger animation delays for card animations */
+  /* added stagger delay classes for sequential animation on multiple cards */
   .animate-delay-100 {
     animation-delay: 0.1s;
   }
@@ -226,6 +223,22 @@
 
   .animate-delay-500 {
     animation-delay: 0.5s;
+  }
+
+  .animate-delay-600 {
+    animation-delay: 0.6s;
+  }
+
+  .animate-delay-700 {
+    animation-delay: 0.7s;
+  }
+
+  .animate-delay-800 {
+    animation-delay: 0.8s;
+  }
+
+  .animate-delay-900 {
+    animation-delay: 0.9s;
   }
 
   .opacity-0 {

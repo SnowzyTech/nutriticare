@@ -87,12 +87,12 @@ export function ProductGrid({ categories = [], search, page = 1, priceRange = [0
         {products.map((product, index) => (
           <div
             key={product.id}
-            className={`bg-gradient-to-br m-3 from-secondary/20 to-secondary/10 rounded-lg overflow-hidden hover:shadow-lg transition h-full flex flex-col group animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
+            className={`bg-card rounded-lg overflow-hidden hover:shadow-lg transition h-full flex flex-col group animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
           >
             <Link href={`/shop/${product.slug}`} className="flex-1 flex flex-col">
               <div className="relative h-full bg-gradient-to-br from-primary/20 to-primary/10 overflow-hidden">
                 <div
-                  className="w-full h-[200px] xs:h-[280px] sm:h-[240px] md:h-[280px] lg:h-[300px] group-hover:scale-105 transition"
+                  className="w-full h-[200px] xs:h-[380px] sm:h-[380px] md:h-[380px] lg:h-[300px] group-hover:scale-105 transition"
                   style={{
                     backgroundImage: `url(${product.image_url || "/dietary-supplements.png"})`,
                     backgroundSize: "cover",

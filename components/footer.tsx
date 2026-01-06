@@ -1,9 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Facebook, Instagram, Twitter } from "lucide-react"
+import { Facebook, Instagram } from "lucide-react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
-
-
 
 export function Footer() {
   const TikTokIcon = (props) => (
@@ -24,7 +22,6 @@ export function Footer() {
       <path d="M15 3v13a6 6 0 1 1-6-6" />
     </svg>
   )
-
 
   const footerRef = useScrollAnimation()
 
@@ -70,7 +67,6 @@ export function Footer() {
                   Contact
                 </Link>
               </li>
-              
             </ul>
           </div>
 
@@ -84,17 +80,17 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-muted-foreground hover:text-primary text-sm">
+                {/* <Link href="#" className="text-muted-foreground hover:text-primary text-sm">
                   Track Order
-                </Link>
+                </Link> */}
               </li>
               <li>
-                <Link href="#" className="text-muted-foreground hover:text-primary text-sm">
+                <Link href="/privacy-policy" className="text-muted-foreground hover:text-primary text-sm">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-muted-foreground hover:text-primary text-sm">
+                <Link href="/terms-of-service" className="text-muted-foreground hover:text-primary text-sm">
                   Terms of Service
                 </Link>
               </li>
@@ -125,7 +121,7 @@ export function Footer() {
           ref={footerRef.ref}
           className={`${footerRef.isVisible ? "animate-slide-in-up" : "opacity-0"} border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between`}
         >
-          <p className="text-muted-foreground text-sm">© 2025 NutritiCare. All rights reserved.</p>
+          <p className="text-muted-foreground text-sm">© 2026 NutritiCare. All rights reserved.</p>
           <div className="flex gap-4 mt-4 md:mt-0">
             <Link
               href="https://www.facebook.com/share/1BXJNh4M9f/"

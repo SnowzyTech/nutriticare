@@ -5,7 +5,7 @@ import { useParams } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import type { Product, Review } from "@/lib/types"
-import { Star, ShoppingCart, Heart, ChevronLeft, ChevronRight } from "lucide-react"
+import { Star, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/lib/cart-context"
 import { useToast } from "@/hooks/use-toast"
@@ -174,7 +174,7 @@ export default function ProductPage() {
           <span>{product.name}</span>
         </div>
 
-        <div className="mb-16 p-6 md:p-8 bg-card rounded-lg border border-border">
+        <div className="mb-16 p-6 md:p-8 bg-card rounded-lg border border-border animate-slide-in-up animate-delay-100">
           <h2 className="text-2xl font-bold text-foreground mb-4">Why Choose {product.name}?</h2>
           <div className="space-y-4 text-foreground/90 leading-relaxed whitespace-pre-line">
             <p>{dynamicDescription}</p>
@@ -185,7 +185,7 @@ export default function ProductPage() {
         <div className="h-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-16">
           {/* Image */}
           <div
-            className="h-64 sm:h-80 md:h-[490px] lg:h-[550px] w-full bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg overflow-hidden"
+            className="h-[450px] sm:h-[520px] md:h-[520px] lg:h-[550px] w-full bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg overflow-hidden animate-slide-in-left animate-delay-200"
             style={{
               backgroundImage: `url(${product.image_url || "/dietary-supplements.png"})`,
               backgroundSize: "cover",
@@ -194,7 +194,7 @@ export default function ProductPage() {
           />
 
           {/* Details */}
-          <div className="mt-0 md:mt-6 flex flex-col justify-start">
+          <div className="mt-0 md:mt-6 flex flex-col justify-start animate-slide-in-right animate-delay-300">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4 md:mb-6">{product.name}</h1>
 
             {/* Rating */}
@@ -247,7 +247,6 @@ export default function ProductPage() {
                 <ShoppingCart className="w-4 sm:w-5 h-4 sm:h-5" />
                 Add to Cart
               </Button>
-              
             </div>
 
             {/* Stock Status */}
@@ -263,7 +262,7 @@ export default function ProductPage() {
           </div>
         </div>
 
-        <div className="border-b border-border mb-8">
+        <div className="border-b border-border mb-8 animate-slide-in-up animate-delay-400">
           <div className="flex gap-8">
             <button
               onClick={() => setActiveTab("description")}
@@ -278,7 +277,7 @@ export default function ProductPage() {
           </div>
         </div>
 
-        <div className="prose prose-invert max-w-none mb-16">
+        <div className="prose prose-invert max-w-none mb-16 animate-slide-in-up animate-delay-500">
           {activeTab === "description" && (
             <p className="text-foreground/80 leading-relaxed whitespace-pre-line">
               {product.description || "No description available"}
@@ -316,7 +315,7 @@ export default function ProductPage() {
           </div>
         </div>
 
-        <div className="mb-16">
+        <div className="mb-16 animate-slide-in-down animate-delay-600">
           <h2 className="text-2xl font-bold text-foreground mb-8">What Our Customers Say</h2>
           <div className="relative">
             <div
@@ -340,13 +339,7 @@ export default function ProductPage() {
                     className="flex-shrink-0 w-80 bg-card rounded-lg p-6  hover:border-primary transition-colors shadow-sm"
                   >
                     <div className="flex items-center gap-4 mb-4">
-                      {/* <img
-                        src={testimonial.customer_image || "/placeholder.svg"}
-                        alt={testimonial.customer_name}
-                        className="w-16 h-16 rounded-full object-cover"
-                      /> */}
                       <div>
-                        
                         <div className="flex gap-1">
                           {[...Array(5)].map((_, i) => (
                             <Star key={i} className="w-4 h-4 fill-primary text-primary" />
@@ -366,7 +359,7 @@ export default function ProductPage() {
               )}
             </div>
 
-          <div className="mt-6 md:mt-8 border-t border-primary-foreground" />
+            <div className="mt-6 md:mt-8 border-t border-primary-foreground" />
 
             {/* Navigation buttons for testimonials */}
             {testimonials.length > 0 && (
@@ -388,31 +381,32 @@ export default function ProductPage() {
           </div>
         </div>
 
-        <div>
+        <div className="animate-slide-in-up animate-delay-700">
           <h2 className="text-2xl font-bold text-foreground mb-8">You Might Also Like</h2>
           {relatedProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
-              {relatedProducts.map((relatedProduct) => (
+            <div className="grid grid-cols-1 m-5 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
+              {relatedProducts.map((relatedProduct, index) => (
                 <a
                   key={relatedProduct.id}
                   href={`/shop/${relatedProduct.slug}`}
-                  className=" rounded-lg overflow-hidden  hover:border-primary transition-colors group"
+                  className={`rounded-lg overflow-hidden hover:border-primary transition-colors group animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
                 >
                   <div
-                    className="h-90 bg-card group-hover:from-primary/30 group-hover:to-primary/20 transition-colors"
+                    className="h-[500px] bg-card group-hover:from-primary/30 group-hover:to-primary/20 transition-colors"
                     style={{
                       backgroundImage: `url(${relatedProduct.image_url})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
                   />
-                  <div className="pt-2 w-full">
+                  <div className="pt-4 w-full">
                     <div className="flex w-full items-center lg:gap-10 md:gap-22 gap-44 justify-center">
-
-                    <h3 className="font-semibold w-full lg:text-[22px] text-[20px] text-foreground mb-2 line-clamp-2  transition-colors">
-                      {relatedProduct.name}
-                    </h3>
-                    <p className="text-primary text-[22px] lg:text-[22px] font-bold mb-2">₦{relatedProduct.price.toLocaleString()}</p>
+                      <h3 className="font-semibold w-full lg:text-[22px] text-[20px] text-foreground mb-2 line-clamp-2  transition-colors">
+                        {relatedProduct.name}
+                      </h3>
+                      <p className="text-primary text-[22px] lg:text-[22px] font-bold mb-2">
+                        ₦{relatedProduct.price.toLocaleString()}
+                      </p>
                     </div>
                     <div className="flex items-center gap-2 mt-2 ">
                       <div className="flex gap-1 text-2xl">
@@ -427,7 +421,6 @@ export default function ProductPage() {
                           />
                         ))}
                       </div>
-                     
                     </div>
                   </div>
                 </a>

@@ -3,11 +3,11 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { HeroCarousel } from "@/components/home/hero-carousel"
-import { AboutSection } from "@/components/home/about-section"
 import { FeaturedProducts } from "@/components/home/featured-products"
 import { BlogPreview } from "@/components/home/blog-preview"
 import { CTASection } from "@/components/home/cta-section"
 import { PromiseSection } from "@/components/home/promise-section"
+import TestimonialsCarousel from "@/components/home/testimonials-carousel"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 
 export default function Home() {
@@ -36,6 +36,13 @@ export default function Home() {
         <FeaturedProducts />
       </section>
 
+      <section
+        className={`transition-all duration-700 ${
+          productsRef.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        }`}
+      >
+        <TestimonialsCarousel />
+      </section>
 
       <section
         ref={blogRef.ref}
@@ -44,7 +51,7 @@ export default function Home() {
         <BlogPreview />
       </section>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" ref={ctaRef.ref}>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-9 pt-10" ref={ctaRef.ref}>
         <div
           className={`transition-all duration-700 ${ctaRef.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >

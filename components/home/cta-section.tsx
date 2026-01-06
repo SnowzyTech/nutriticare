@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react"
 
 export function CTASection() {
   return (
-    <section className="py-16 mb-2">
+    <section className="py-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-r from-purple-900/20 to-purple-800/10 hover:from-purple-900/30 hover:to-purple-800/20 p-12 rounded-lg transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] group cursor-pointer border border-transparent hover:border-primary/30">
         <h2 className="text-3xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors duration-300">
           Contact Us

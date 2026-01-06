@@ -121,7 +121,7 @@ export function ChatbotWidget() {
         className="fixed bottom-6 right-6 z-40 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110 cursor-pointer"
         aria-label="Toggle chat"
       >
-        {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
+        {isOpen ? <X className="w-4 h-4" /> : <MessageCircle className="w-3 h-3" />}
       </button>
 
       {/* Chat Window */}
