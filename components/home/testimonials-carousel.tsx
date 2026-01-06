@@ -84,14 +84,14 @@ export default function TestimonialsCarousel() {
 
         {/* Carousel Container */}
         <div className="relative">
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center md:gap-4 gap-2">
             {/* Previous Button */}
             <button
               onClick={handlePrev}
-              className="flex-shrink-0 z-10 p-2 rounded-full border border-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+              className="flex-shrink-0  hidden md:flex z-10 p-2 rounded-full border border-primary hover:bg-primary hover:text-primary-foreground transition-colors"
               aria-label="Previous testimonial"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="md:w-6 w-3 h-3 md:h-6" />
             </button>
 
             {/* Testimonial Cards Container */}
@@ -151,7 +151,7 @@ export default function TestimonialsCarousel() {
               className="flex-shrink-0 z-10 p-2 rounded-full border border-primary hover:bg-primary hover:text-primary-foreground transition-colors"
               aria-label="Next testimonial"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="md:w-6 w-3 h-3 md:h-6" />
             </button>
           </div>
 
