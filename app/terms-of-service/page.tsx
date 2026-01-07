@@ -20,7 +20,7 @@ export default function TermsOfServicePage() {
               <FileText className="w-16 h-16 text-primary" />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Terms of Service</h1>
-            <p className="text-muted-foreground text-sm">Last Updated: January 2025</p>
+            <p className="text-muted-foreground text-sm">Last Updated: January 2026</p>
           </div>
         </section>
 
@@ -84,11 +84,11 @@ export default function TermsOfServicePage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">•</span>
-                    <span>Delivery times vary depending on your location and may take 3-7 business days</span>
+                    <span>Delivery times vary depending on your location and may take 2-3 business days</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">•</span>
-                    <span>Shipping costs are calculated at checkout based on your delivery address</span>
+                    {/* <span className="text-primary mt-1">•</span> */}
+                    {/* <span>Shipping costs are calculated at checkout based on your delivery address</span> */}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">•</span>

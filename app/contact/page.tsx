@@ -190,7 +190,7 @@ export default function ContactPage() {
                   <div className="min-w-0">
                     <h3 className="font-semibold text-foreground mb-1">Email</h3>
                     <p className="text-muted-foreground text-sm sm:text-base break-words">
-                      Mynutriticaresuppport@gmail.com
+                      support@nutriticare.com
                     </p>
                   </div>
                 </div>

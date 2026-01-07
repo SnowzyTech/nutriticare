@@ -60,7 +60,7 @@ export default function CartPage() {
                   />
                   <div className="flex-1 flex flex-col">
                     <h3 className="font-semibold text-foreground mb-2">{item.name}</h3>
-                    <p className="text-primary font-bold mb-4">₦{item.price.toFixed(2)}</p>
+                    <p className="text-yellow-300 font-bold mb-4">₦{item.price.toFixed(2)}</p>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
                       <div className="flex items-center border border-border rounded-lg w-fit">
                         <button
@@ -95,23 +95,23 @@ export default function CartPage() {
             <h2 className="text-xl font-bold text-foreground mb-6">Order Summary</h2>
 
             <div className="space-y-4 mb-6 pb-6 border-b border-border">
-              <div className="flex justify-between text-muted-foreground">
-                <span>Subtotal</span>
+              <div className="flex justify-between text-foreground">
+                <span className="text-foreground/70">Subtotal</span>
                 <span>₦{total.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-muted-foreground">
-                <span>Shipping</span>
+              <div className="flex justify-between text-foreground">
+                <span className="text-foreground/70">Shipping</span>
                 <span>Free</span>
               </div>
-              <div className="flex justify-between text-muted-foreground">
-                <span>Tax</span>
+              <div className="flex justify-between text-foreground">
+                <span className="text-foreground/70">Tax</span>
                 <span>₦{(total * 0.1).toFixed(2)}</span>
               </div>
             </div>
 
             <div className="flex justify-between mb-6">
               <span className="font-semibold text-foreground">Total</span>
-              <span className="text-2xl font-bold text-primary">₦{total.toFixed(2)}</span>
+              <span className="text-2xl font-bold text-yellow-300">₦{total.toFixed(2)}</span>
             </div>
 
             <Link href="/checkout">

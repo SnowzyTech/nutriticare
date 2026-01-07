@@ -393,7 +393,7 @@ export default function CheckoutPage() {
 
             <div className="flex justify-between">
               <span className="font-semibold text-foreground">Total</span>
-              <span className="text-2xl font-bold text-primary">₦{total.toFixed(2)}</span>
+              <span className="text-2xl font-bold text-yellow-300">₦{total.toFixed(2)}</span>
             </div>
           </div>
         </div>

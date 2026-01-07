@@ -86,7 +86,7 @@ export function FeaturedProducts() {
                   </p>
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <p className="text-lg font-bold text-primary">₦{product.price.toFixed(2)}</p>
+                      <p className="text-lg font-bold text-yellow-300">₦{product.price.toFixed(2)}</p>
                       {product.original_price && (
                         <p className="text-sm text-muted-foreground line-through">
                           ₦{product.original_price.toFixed(2)}
@@ -95,7 +95,7 @@ export function FeaturedProducts() {
                     </div>
                   </div>
                   <Link href={`/shop/${product.slug}`} className="w-full">
-                    <Button className="w-full rounded-none bg-primary hover:bg-primary/90 text-white font-bold uppercase">Select</Button>
+                    <Button className="w-full rounded-none cursor-pointer bg-primary hover:bg-primary/90 text-white font-bold uppercase">Select</Button>
                   </Link>
                 </div>
               </div>

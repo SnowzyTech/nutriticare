@@ -20,7 +20,7 @@ export default function PrivacyPolicyPage() {
               <Shield className="w-16 h-16 text-primary" />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Privacy Policy</h1>
-            <p className="text-muted-foreground text-sm">Last Updated: January 2025</p>
+            <p className="text-muted-foreground text-sm">Last Updated: January 2026</p>
           </div>
         </section>
 
@@ -52,13 +52,7 @@ export default function PrivacyPolicyPage() {
                       address, phone number, shipping address, and payment details.
                     </p>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-2">Usage Data</h3>
-                    <p className="leading-relaxed">
-                      We automatically collect certain information about your device, including your IP address, browser
-                      type, and browsing patterns on our website.
-                    </p>
-                  </div>
+                  
                   <div>
                     <h3 className="font-semibold text-lg mb-2">Health Information</h3>
                     <p className="leading-relaxed">
@@ -180,7 +174,7 @@ export default function PrivacyPolicyPage() {
                 </p>
                 <div className="space-y-2 text-foreground/90">
                   <p>
-                    <strong>Email:</strong> privacy@nutriticare.com
+                    <strong>Email:</strong> support@nutriticare.com
                   </p>
                   <p>
                     <strong>Phone:</strong> +234 (0) 123 456 7890
