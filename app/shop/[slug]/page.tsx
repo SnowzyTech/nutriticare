@@ -84,11 +84,13 @@ function WhyChooseSection({ productName, description }: { productName: string; d
   }
 
   return (
-    <div className="mb-16 overflow-hidden rounded-2xl">
+    <div className="mb-16 m-0 md:m-1 max-w-full overflow-hidden rounded-2xl">
       {/* Header Section */}
-      <div className="relative px-6 md:px-10 py-8 md:py-12 bg-gradient-to-r from-yellow-300/40 via-yellow-500/5 to-primary/10 border border-primary/20">
+      <div className="relative w-full px-6 md:px-10 py-8 md:py-12 bg-gradient-to-r from-yellow-300/40 via-yellow-500/5 to-primary/10 border border-primary/20">
         <div className="absolute top-0 left-0 w-1 h-20 bg-gradient-to-b from-yellow-400 to-transparent"></div>
 
+
+        
         <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2 flex items-center gap-3">
           {`Why Choose ${productName}?`}
           <span className="text-yellow-400 text-2xl">✨</span>
@@ -97,7 +99,7 @@ function WhyChooseSection({ productName, description }: { productName: string; d
       </div>
 
       {/* Cards Grid Section */}
-      <div className="px-6 md:px-10 py-12 md:py-16 bg-gradient-to-b from-card/40 to-background">
+      <div className="px-2  md:px-10 py-12 md:py-16 bg-gradient-to-b from-card/40 to-background">
         <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-5 md:gap-6">
           {descriptionCards.map((card, index) => {
             const IconComponent = iconMap[card.icon]
@@ -327,11 +329,14 @@ export default function ProductPage() {
             Products
           </a>
           <span>/</span>
-          <span>{product.name}</span>
+          <span className="text-foreground">{product.name}</span>
         </div>
 
         {/* Why Choose Section */}
+        <div className="w-full">
+
         <WhyChooseSection productName={product.name} description={dynamicDescription} />
+        </div>
 
         <div className="h-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-16">
           <ProductImageGallery
