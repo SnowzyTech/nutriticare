@@ -61,8 +61,7 @@ export default function AdminProductsPage() {
         router.push("/admin/login")
       } else {
         setIsAuthenticated(true)
-        fetchProducts()
-        fetchCategories()
+        await Promise.all([fetchProducts(), fetchCategories()])
       }
     }
 
@@ -193,8 +192,7 @@ export default function AdminProductsPage() {
       } else {
         await createProduct(payload)
       }
-      fetchProducts()
-      fetchCategories()
+      await Promise.all([fetchProducts(), fetchCategories()])
       setShowDialog(false)
       setEditingId(null)
       setFormData({
@@ -225,7 +223,7 @@ export default function AdminProductsPage() {
     if (confirm("Are you sure you want to delete this product?")) {
       try {
         await deleteProduct(id)
-        fetchProducts()
+        await Promise.all([fetchProducts(), fetchCategories()])
         toast({
           title: "Success",
           description: "Product deleted successfully",

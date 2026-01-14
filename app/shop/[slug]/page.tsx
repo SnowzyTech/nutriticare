@@ -565,7 +565,7 @@ export default function ProductPage() {
                       </div>
                     </div>
                     <a href={`/shop/${relatedProduct.slug}`} className="w-full">
-                      <Button className="w-full bg-primary hover:bg-primary/90 text-white py-2">Select</Button>
+                      <Button className="w-full bg-primary hover:bg-primary/90 text-white cursor-pointer py-2">Select</Button>
                     </a>
                   </div>
                 </div>

@@ -1,10 +1,59 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { memo, useEffect, useState } from "react"
 import Link from "next/link"
 import type { Product } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { Eye } from "lucide-react"
+
+const FeaturedProductCard = memo(function FeaturedProductCard({
+  product,
+  index,
+  cardColors,
+}: {
+  product: Product
+  index: number
+  cardColors: string[]
+}) {
+  return (
+    <div
+      key={product.id}
+      className={`group relative rounded-lg overflow-hidden hover:shadow-2xl border bg-background transition-all duration-300 h-full flex flex-col animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
+    >
+      <div className="relative md:h-[390px] h-[350px] overflow-hidden">
+        <img
+          src={product.image_url || "/dietary-supplements.png"}
+          alt={product.name}
+          loading="lazy"
+          className={`w-full h-full ${cardColors[index % cardColors.length]} object-cover transition-transform duration-500 ease-out group-hover:scale-105`}
+        />
+        <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-lg">
+          <Button size="lg" className="relative cursor-pointer text-white z-10 transition-transform duration-300">
+            <Eye className="w-5 h-5 mr-2" />
+            View Product
+          </Button>
+        </div>
+      </div>
+      <div className="p-4 flex-1 flex flex-col bg-card ">
+        <h3 className="font-semibold text-foreground mb-2 line-clamp-2">{product.name}</h3>
+        <p className="text-sm text-muted-foreground mb-4 flex-1">{product.description?.substring(0, 60)}...</p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="text-lg font-bold text-yellow-300">₦{product.price.toFixed(2)}</p>
+            {product.original_price && (
+              <p className="text-sm text-muted-foreground line-through">₦{product.original_price.toFixed(2)}</p>
+            )}
+          </div>
+        </div>
+        <Link href={`/shop/${product.slug}`} className="w-full">
+          <Button className="w-full rounded-none cursor-pointer bg-primary hover:bg-primary/90 text-white font-bold uppercase">
+            Select
+          </Button>
+        </Link>
+      </div>
+    </div>
+  )
+})
 
 export function FeaturedProducts() {
   const [products, setProducts] = useState<Product[]>([])
@@ -47,58 +96,7 @@ export function FeaturedProducts() {
         ) : (
           <div className="grid grid-cols-1 xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product, index) => (
-              <div
-                key={product.id}
-                className={`group relative rounded-lg overflow-hidden hover:shadow-2xl border bg-background transition-all duration-300 h-full flex flex-col animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
-              >
-                <div className="relative md:h-[390px] h-[350px] overflow-hidden">
-                  <div
-                    className={`w-full h-full ${cardColors[index % cardColors.length]} transition-transform duration-500 ease-out`}
-                    style={{
-                      backgroundImage: `url(${product.image_url || "/dietary-supplements.png"})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-lg">
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        backgroundImage: `url(${product.image_url || "/dietary-supplements.png"})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }}
-                    />
-                    <div className="absolute  inset-0 bg-black/60" />
-                    <Button
-                      size="lg"
-                      className="relative top-0 cursor-pointer text-white z-10 transition-transform duration-300"
-                    >
-                      <Eye className="w-5 h-5 mr-2" />
-                      View Product
-                    </Button>
-                  </div>
-                </div>
-                <div className="p-4 flex-1 flex flex-col bg-card ">
-                  <h3 className="font-semibold text-foreground mb-2 line-clamp-2">{product.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-4 flex-1">
-                    {product.description?.substring(0, 60)}...
-                  </p>
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <p className="text-lg font-bold text-yellow-300">₦{product.price.toFixed(2)}</p>
-                      {product.original_price && (
-                        <p className="text-sm text-muted-foreground line-through">
-                          ₦{product.original_price.toFixed(2)}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <Link href={`/shop/${product.slug}`} className="w-full">
-                    <Button className="w-full rounded-none cursor-pointer bg-primary hover:bg-primary/90 text-white font-bold uppercase">Select</Button>
-                  </Link>
-                </div>
-              </div>
+              <FeaturedProductCard key={product.id} product={product} index={index} cardColors={cardColors} />
             ))}
           </div>
         )}
