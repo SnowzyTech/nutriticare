@@ -6,7 +6,7 @@ import { useMemo } from "react"
 interface ProductImageGalleryProps {
   images?: string[]
   mainImage: string
-  originalImage: string // Add originalImage prop to always reference the true original
+  originalImage: string
   onImageSelect: (image: string) => void
 }
 
@@ -41,13 +41,12 @@ export function ProductImageGallery({
         />
       </div>
 
-      {/* Thumbnail Images - Shows original image first + unique gallery images */}
       {(uniqueImages.length > 0 || mainImage) && (
-        <div className="flex md:gap-2 lg:gap-4 xl:gap-6 gap-3 overflow-x-auto w-full items-center justify-center pt-4  mx-auto pb-10 md:pb-2">
+        <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-6 overflow-x-auto w-full items-start pt-4 pb-10 md:pb-2">
           <button
             onClick={() => onImageSelect(originalImage)}
             className={cn(
-              "flex-shrink-0 w-22 md:w-23 lg:w-20 xl:w-24 h-20 md:h-24 rounded-lg overflow-hidden border-2 transition-all hover:border-primary cursor-pointer",
+              "flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-lg overflow-hidden border-2 transition-all hover:border-primary cursor-pointer",
               mainImage === originalImage
                 ? "border-primary shadow-lg scale-105"
                 : "border-border hover:border-primary/50",
@@ -66,7 +65,7 @@ export function ProductImageGallery({
               key={index}
               onClick={() => onImageSelect(image)}
               className={cn(
-                "flex-shrink-0 xl:w-24 lg:w-20 md:w-23 w-22 items-center flex justify-center h-20  md:h-24 rounded-lg overflow-hidden border-2 transition-all hover:border-primary cursor-pointer",
+                "flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-lg overflow-hidden border-2 transition-all hover:border-primary cursor-pointer",
                 mainImage === image ? "border-primary shadow-lg scale-105" : "border-border hover:border-primary/50",
               )}
               title={`Click to view image ${index + 1}`}

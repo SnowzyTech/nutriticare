@@ -101,7 +101,7 @@ export function ProductGrid({ categories = [], search, page = 1, priceRange = [0
                 />
                 {product.original_price && (
                   <div className="absolute top-2 right-2 bg-primary text-primary-foreground px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-semibold">
-                    SALE
+                    S
                   </div>
                 )}
               </div>

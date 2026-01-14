@@ -89,8 +89,6 @@ function WhyChooseSection({ productName, description }: { productName: string; d
       <div className="relative w-full px-6 md:px-10 py-8 md:py-12 bg-gradient-to-r from-yellow-300/40 via-yellow-500/5 to-primary/10 border border-primary/20">
         <div className="absolute top-0 left-0 w-1 h-20 bg-gradient-to-b from-yellow-400 to-transparent"></div>
 
-
-        
         <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2 flex items-center gap-3">
           {`Why Choose ${productName}?`}
           <span className="text-yellow-400 text-2xl">✨</span>
@@ -209,20 +207,22 @@ export default function ProductPage() {
         const data = await response.json()
         setProduct(data)
 
-        // Fetch reviews
-        const reviewsResponse = await fetch(`/api/products/${data.id}/reviews`)
+        const [reviewsResponse, testimonialsResponse, relatedResponse] = await Promise.all([
+          fetch(`/api/products/${data.id}/reviews`),
+          fetch(`/api/products/${data.id}/testimonials`),
+          fetch(`/api/products?categories=${encodeURIComponent(data.category)}&limit=8`),
+        ])
+
         if (reviewsResponse.ok) {
           const reviewsData = await reviewsResponse.json()
           setReviews(reviewsData)
         }
 
-        const testimonialsResponse = await fetch(`/api/products/${data.id}/testimonials`)
         if (testimonialsResponse.ok) {
           const testimonialsData = await testimonialsResponse.json()
           setTestimonials(testimonialsData)
         }
 
-        const relatedResponse = await fetch(`/api/products?categories=${encodeURIComponent(data.category)}&limit=8`)
         if (relatedResponse.ok) {
           const relatedData = await relatedResponse.json()
           const filtered = relatedData.products.filter((p: Product) => p.id !== data.id).slice(0, 4)
@@ -334,8 +334,7 @@ export default function ProductPage() {
 
         {/* Why Choose Section */}
         <div className="w-full">
-
-        <WhyChooseSection productName={product.name} description={dynamicDescription} />
+          <WhyChooseSection productName={product.name} description={dynamicDescription} />
         </div>
 
         <div className="h-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-16">
@@ -344,7 +343,6 @@ export default function ProductPage() {
             mainImage={selectedImage || product?.image_url}
             originalImage={product?.image_url || ""} // Added originalImage prop to keep track of the original product image
             onImageSelect={setSelectedImage}
-            
           />
 
           {/* Details */}
@@ -529,12 +527,11 @@ export default function ProductPage() {
         <div className="animate-slide-in-up animate-delay-700 mt-14">
           <h2 className="text-2xl font-bold text-foreground mb-8">You Might Also Like</h2>
           {relatedProducts.length > 0 ? (
-            <div className="grid grid-cols-1 m-5 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
               {relatedProducts.map((relatedProduct, index) => (
-                <a
+                <div
                   key={relatedProduct.id}
-                  href={`/shop/${relatedProduct.slug}`}
-                  className={`rounded-lg overflow-hidden hover:border-primary transition-colors group animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
+                  className={`rounded-lg overflow-hidden transition-colors group animate-slide-in-up animate-delay-${(index % 5) + 1}00`}
                 >
                   <div
                     className="h-[500px] bg-card group-hover:from-primary/30 group-hover:to-primary/20 transition-colors"
@@ -545,15 +542,15 @@ export default function ProductPage() {
                     }}
                   />
                   <div className="pt-4 w-full">
-                    <div className="flex w-full items-center lg:gap-10 md:gap-22 gap-44 justify-center">
-                      <h3 className="font-semibold w-full lg:text-[22px] text-[20px] text-foreground mb-2 line-clamp-2 transition-colors">
+                    <div className="flex w-full items-center lg:gap-10 md:gap-22 gap-20 justify-center">
+                      <h3 className="font-semibold w-full lg:text-[22px] text-[15px] md:text-[18px] text-foreground mb-2 line-clamp-2 transition-colors">
                         {relatedProduct.name}
                       </h3>
-                      <p className="text-yellow-300 text-[22px] lg:text-[22px] font-bold mb-2">
+                      <p className="text-yellow-300 text-[15px] lg:text-[22px] md:text-[18px] font-bold mb-2">
                         ₦{relatedProduct.price.toLocaleString()}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 mt-2">
+                    <div className="flex items-center gap-2 mt-2 mb-4">
                       <div className="flex gap-1 text-2xl">
                         {[...Array(5)].map((_, i) => (
                           <Star
@@ -567,8 +564,11 @@ export default function ProductPage() {
                         ))}
                       </div>
                     </div>
+                    <a href={`/shop/${relatedProduct.slug}`} className="w-full">
+                      <Button className="w-full bg-primary hover:bg-primary/90 text-white py-2">Select</Button>
+                    </a>
                   </div>
-                </a>
+                </div>
               ))}
             </div>
           ) : (

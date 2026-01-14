@@ -9,10 +9,10 @@ export const productGalleryImages: Record<string, string[]> = {
     "/products/klinka/image-4.jpg",
   ],
   "vito-rep-plus": [
-    "/products/vito-rep-plus/image-1.jpg",
-    "/products/vito-rep-plus/image-2.jpg",
-    "/products/vito-rep-plus/image-3.jpg",
-    "/products/vito-rep-plus/image-4.jpg",
+    "/products/vito-rep-plus/vitorep1.jpg",
+    "/products/vito-rep-plus/vitorep2.jpg",
+    "/products/vito-rep-plus/vitorep3.jpg",
+    "/products/vito-rep-plus/vitorep4.jpg",
   ],
   "neurovive-balm": [
     "/products/neurovive-balm/image-1.jpg",
