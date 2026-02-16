@@ -116,6 +116,9 @@ export default function CheckoutPage() {
 
       const initData = await initResponse.json()
 
+      console.log("[v0] Payment init response:", JSON.stringify(initData))
+      console.log("[v0] Payment init HTTP status:", initResponse.status)
+
       if (!initData.success) {
         throw new Error(initData.error || "Failed to initialize payment")
       }
