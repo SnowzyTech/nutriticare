@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid items" }, { status: 400 })
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nutriticare.com"
     const callbackUrl = `${baseUrl}/api/paystack/callback`
 
     const response = await fetch("https://api.paystack.co/transaction/initialize", {
