@@ -11,9 +11,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify payment with Paystack
+    const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY?.trim()
+    if (!paystackSecretKey) {
+      return NextResponse.redirect(new URL(`/checkout/failed?error=Payment+service+not+configured`, request.url))
+    }
+
     const verifyResponse = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
       headers: {
-        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        Authorization: `Bearer ${paystackSecretKey}`,
       },
     })
 

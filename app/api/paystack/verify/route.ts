@@ -7,10 +7,15 @@ export async function POST(request: NextRequest) {
     const { reference } = body
 
     // Verify payment with Paystack
+    const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY?.trim()
+    if (!paystackSecretKey) {
+      return NextResponse.json({ error: "Payment service is not configured" }, { status: 500 })
+    }
+
     const response = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        Authorization: `Bearer ${paystackSecretKey}`,
       },
     })
 
