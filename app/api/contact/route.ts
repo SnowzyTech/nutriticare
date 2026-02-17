@@ -3,7 +3,9 @@ import { type NextRequest, NextResponse } from "next/server"
 import { contactFormSchema } from "@/lib/contact-validation"
 import { contactLimiter, checkRateLimit } from "@/lib/rate-limit"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     const validatedData = validationResult.data
 
-    const response = await resend.emails.send({
+    const response = await getResend().emails.send({
       from: "onboarding@resend.dev",
       to: "snowzytech@gmail.com",
       replyTo: validatedData.email,
