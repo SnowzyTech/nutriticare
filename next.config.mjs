@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -10,8 +7,6 @@ const nextConfig = {
     unoptimized: true,
   },
 
-  turbopack: {},
-  
   experimental: {
     serverActions: {
       bodySizeLimit: '5mb',
