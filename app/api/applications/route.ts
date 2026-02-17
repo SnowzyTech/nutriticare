@@ -3,9 +3,9 @@ import { applicationFormSchema } from "@/lib/contact-validation"
 import { createClient } from "@supabase/supabase-js"
 import { contactLimiter, checkRateLimit } from "@/lib/rate-limit"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
+function getSupabase() {
+  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+}
 
 async function verifyAdminAuth(request: NextRequest): Promise<{ isAdmin: boolean; userId?: string; error?: string }> {
   try {
@@ -20,14 +20,14 @@ async function verifyAdminAuth(request: NextRequest): Promise<{ isAdmin: boolean
     const {
       data: { user },
       error: authError,
-    } = await supabase.auth.getUser(token)
+    } = await getSupabase().auth.getUser(token)
 
     if (authError || !user) {
       return { isAdmin: false, error: "Invalid or expired token" }
     }
 
     // Check if user is an admin
-    const { data: userData, error: userError } = await supabase
+    const { data: userData, error: userError } = await getSupabase()
       .from("users")
       .select("is_admin")
       .eq("id", user.id)
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert application into database
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from("job_applications")
       .insert({
         full_name: fullName,
@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch all applications
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from("job_applications")
       .select("*")
       .order("created_at", { ascending: false })

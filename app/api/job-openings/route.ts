@@ -2,9 +2,9 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 import { z } from "zod"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
+function getSupabase() {
+  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+}
 
 const jobOpeningSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title too long").trim(),
@@ -31,14 +31,14 @@ async function verifyAdminAuth(request: NextRequest): Promise<{ isAdmin: boolean
     const {
       data: { user },
       error: authError,
-    } = await supabase.auth.getUser(token)
+    } = await getSupabase().auth.getUser(token)
 
     if (authError || !user) {
       return { isAdmin: false, error: "Invalid or expired token" }
     }
 
     // Check if user is an admin
-    const { data: userData, error: userError } = await supabase
+    const { data: userData, error: userError } = await getSupabase()
       .from("users")
       .select("is_admin")
       .eq("id", user.id)
@@ -58,7 +58,7 @@ async function verifyAdminAuth(request: NextRequest): Promise<{ isAdmin: boolean
 // GET all active job openings
 export async function GET() {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from("job_openings")
       .select("*")
       .eq("is_active", true)
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
 
     const { title, requirements, location, type } = validationResult.data
 
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from("job_openings")
       .insert({
         title,
