@@ -2,9 +2,9 @@ import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 import { z } from "zod"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
+function getSupabase() {
+  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+}
 
 const statusSchema = z.object({
   status: z.enum(["pending", "reviewed", "accepted", "rejected"], {
@@ -25,14 +25,14 @@ async function verifyAdminAuth(request: NextRequest): Promise<{ isAdmin: boolean
     const {
       data: { user },
       error: authError,
-    } = await supabase.auth.getUser(token)
+    } = await getSupabase().auth.getUser(token)
 
     if (authError || !user) {
       return { isAdmin: false, error: "Invalid or expired token" }
     }
 
     // Check if user is an admin
-    const { data: userData, error: userError } = await supabase
+    const { data: userData, error: userError } = await getSupabase()
       .from("users")
       .select("is_admin")
       .eq("id", user.id)
@@ -75,7 +75,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     const { status } = validationResult.data
 
-    const { data: existingApp, error: fetchError } = await supabase
+    const { data: existingApp, error: fetchError } = await getSupabase()
       .from("job_applications")
       .select("id")
       .eq("id", id)
@@ -85,7 +85,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       return NextResponse.json({ error: "Application not found" }, { status: 404 })
     }
 
-    const { data, error } = await supabase.from("job_applications").update({ status }).eq("id", id).select().single()
+    const { data, error } = await getSupabase().from("job_applications").update({ status }).eq("id", id).select().single()
 
     if (error) {
       console.error("[v0] Update application status error:", error)
@@ -113,7 +113,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: authResult.error || "Unauthorized" }, { status: 401 })
     }
 
-    const { data: existingApp, error: fetchError } = await supabase
+    const { data: existingApp, error: fetchError } = await getSupabase()
       .from("job_applications")
       .select("id")
       .eq("id", id)
@@ -123,7 +123,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: "Application not found" }, { status: 404 })
     }
 
-    const { error } = await supabase.from("job_applications").delete().eq("id", id)
+    const { error } = await getSupabase().from("job_applications").delete().eq("id", id)
 
     if (error) {
       console.error("[v0] Delete application error:", error)
