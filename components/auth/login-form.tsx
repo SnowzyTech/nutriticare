@@ -26,6 +26,11 @@ export function LoginForm() {
 
     try {
       const supabase = getSupabaseClient()
+      if (!supabase) {
+        setError("Service unavailable. Please try again later.")
+        setLoading(false)
+        return
+      }
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,

@@ -34,7 +34,9 @@ export function AdminSidebar() {
 
   const handleLogout = async () => {
     const supabase = getSupabaseClient()
-    await supabase.auth.signOut()
+    if (supabase) {
+      await supabase.auth.signOut()
+    }
     localStorage.removeItem("adminToken")
     router.push("/admin/login")
   }

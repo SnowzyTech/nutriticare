@@ -57,7 +57,7 @@ export function BlogPreview() {
       try {
         const response = await fetch("/api/blog?limit=3")
         const data = await response.json()
-        setPostsState(data.posts.slice(0, 3))
+        setPostsState((data?.posts || []).slice(0, 3))
       } catch (error) {
         console.error("Failed to fetch blog posts:", error)
       } finally {
