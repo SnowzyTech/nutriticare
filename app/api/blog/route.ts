@@ -46,13 +46,13 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error("[v0] Supabase error:", error)
-      return NextResponse.json({ error: "Failed to fetch blog posts" }, { status: 500 })
+      return NextResponse.json({ error: "Failed to fetch blog posts", posts: [], total: 0, page, limit }, { status: 200 })
     }
 
-    const total = posts?.length || 0
+    const total = Array.isArray(posts) ? posts.length : 0
     const start = (page - 1) * limit
     const end = start + limit
-    const paginatedData = posts?.slice(start, end) || []
+    const paginatedData = Array.isArray(posts) ? posts.slice(start, end) : []
 
     return NextResponse.json({
       posts: paginatedData,

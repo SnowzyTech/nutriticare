@@ -60,10 +60,12 @@ export function BlogGrid({ category, search, page = 1 }: BlogGridProps) {
 
         const response = await fetch(`/api/blog?${params}`)
         const data = await response.json()
-        setPostsState(data.posts)
-        setTotal(data.total)
+        setPostsState(Array.isArray(data.posts) ? data.posts : [])
+        setTotal(typeof data.total === "number" ? data.total : 0)
       } catch (error) {
         console.error("Failed to fetch blog posts:", error)
+        setPostsState([])
+        setTotal(0)
       } finally {
         setLoading(false)
       }

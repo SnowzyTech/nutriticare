@@ -108,10 +108,12 @@ export function ProductGrid({ categories = [], search, page = 1, priceRange = [0
 
         const response = await fetch(`/api/products?${params}`)
         const data = await response.json()
-        setProducts(data.products)
-        setTotal(data.total)
+        setProducts(Array.isArray(data.products) ? data.products : [])
+        setTotal(typeof data.total === "number" ? data.total : 0)
       } catch (error) {
         console.error("Failed to fetch products:", error)
+        setProducts([])
+        setTotal(0)
       } finally {
         setLoading(false)
       }

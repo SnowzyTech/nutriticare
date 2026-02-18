@@ -33,10 +33,22 @@ export default function CheckoutPage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const supabase = createBrowserClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        )
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+        if (!supabaseUrl || !supabaseAnonKey) {
+          console.warn("[v0] Supabase environment variables not set")
+          setIsAuthenticated(false)
+          toast({
+            title: "Authentication Required",
+            description: "Please sign in to proceed with checkout.",
+            variant: "destructive",
+          })
+          router.push("/login")
+          return
+        }
+
+        const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey)
         const {
           data: { session },
         } = await supabase.auth.getSession()
@@ -50,7 +62,8 @@ export default function CheckoutPage() {
           router.push("/login")
         }
       } catch (error) {
-        console.error("Auth check error:", error)
+        console.error("[v0] Auth check error:", error)
+        setIsAuthenticated(false)
       } finally {
         setAuthLoading(false)
       }

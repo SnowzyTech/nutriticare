@@ -27,7 +27,13 @@ export function LoginForm() {
     try {
       const supabase = getSupabaseClient()
       if (!supabase) {
-        setError("Service unavailable. Please try again later.")
+        const errorMsg = "Authentication service is unavailable. Please ensure Supabase is properly configured."
+        setError(errorMsg)
+        toast({
+          title: "Service Unavailable",
+          description: errorMsg,
+          variant: "destructive",
+        })
         setLoading(false)
         return
       }
@@ -51,10 +57,11 @@ export function LoginForm() {
         router.push("/")
       }
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      const errorMsg = err instanceof Error ? err.message : "An error occurred. Please try again."
+      setError(errorMsg)
       toast({
         title: "Error",
-        description: "An error occurred. Please try again.",
+        description: errorMsg,
         variant: "destructive",
       })
     } finally {
