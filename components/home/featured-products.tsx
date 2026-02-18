@@ -64,7 +64,7 @@ export function FeaturedProducts() {
       try {
         const response = await fetch("/api/products?limit=4")
         const data = await response.json()
-        setProducts(data.products.slice(0, 4))
+        setProducts((data?.products || []).slice(0, 4))
       } catch (error) {
         console.error("Failed to fetch products:", error)
       } finally {

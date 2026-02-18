@@ -60,6 +60,10 @@ export default function AdminApplicationsPage() {
 
   const checkAuth = async () => {
     const supabase = getSupabaseClient()
+    if (!supabase) {
+      router.push("/admin/login")
+      return
+    }
     const {
       data: { session },
     } = await supabase.auth.getSession()
@@ -108,6 +112,7 @@ export default function AdminApplicationsPage() {
   const handleStatusChange = async (applicationId: string, newStatus: string) => {
     try {
       const supabase = getSupabaseClient()
+      if (!supabase) return
       const {
         data: { session },
       } = await supabase.auth.getSession()
@@ -155,6 +160,7 @@ export default function AdminApplicationsPage() {
   const handleCreateJob = async () => {
     try {
       const supabase = getSupabaseClient()
+      if (!supabase) return
       const {
         data: { session },
       } = await supabase.auth.getSession()
@@ -219,6 +225,7 @@ export default function AdminApplicationsPage() {
 
     try {
       const supabase = getSupabaseClient()
+      if (!supabase) return
       const {
         data: { session },
       } = await supabase.auth.getSession()
@@ -262,6 +269,7 @@ export default function AdminApplicationsPage() {
 
     try {
       const supabase = getSupabaseClient()
+      if (!supabase) return
       const {
         data: { session },
       } = await supabase.auth.getSession()

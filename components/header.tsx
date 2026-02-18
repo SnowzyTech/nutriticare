@@ -18,8 +18,13 @@ export function Header() {
   const pathname = usePathname()
 
   useEffect(() => {
+    const supabase = getSupabaseClient()
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
+
     const checkUser = async () => {
-      const supabase = getSupabaseClient()
       const {
         data: { user },
       } = await supabase.auth.getUser()
@@ -29,7 +34,6 @@ export function Header() {
 
     checkUser()
 
-    const supabase = getSupabaseClient()
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -41,6 +45,7 @@ export function Header() {
 
   const handleLogout = async () => {
     const supabase = getSupabaseClient()
+    if (!supabase) return
     await supabase.auth.signOut()
     setUser(null)
   }
