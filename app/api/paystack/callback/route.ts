@@ -25,7 +25,9 @@ export async function GET(request: NextRequest) {
     const verifyData = await verifyResponse.json()
 
     if (!verifyData.status || verifyData.data.status !== "success") {
-      return NextResponse.json({ error: "Payment verification failed", data: verifyData }, { status: 400 })
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nutriticare.com"
+      const failureUrl = `${baseUrl}/checkout/failed?error=Payment+verification+failed`
+      return NextResponse.redirect(new URL(failureUrl))
     }
 
     // Payment verified successfully
@@ -76,10 +78,14 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Redirect to success page with order ID
-    return NextResponse.redirect(new URL(`/checkout/success?orderId=${order.id}&reference=${reference}`, request.url))
+    // Redirect to success page with order ID using proper base URL
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nutriticare.com"
+    const successUrl = `${baseUrl}/checkout/success?orderId=${order.id}&reference=${reference}`
+    return NextResponse.redirect(new URL(successUrl))
   } catch (error) {
     console.error("[v0] Callback error:", error)
-    return NextResponse.redirect(new URL(`/checkout/failed?error=${encodeURIComponent(String(error))}`, request.url))
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nutriticare.com"
+    const errorUrl = `${baseUrl}/checkout/failed?error=${encodeURIComponent(String(error))}`
+    return NextResponse.redirect(new URL(errorUrl))
   }
 }
