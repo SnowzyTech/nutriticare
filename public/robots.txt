@@ -1,0 +1,11 @@
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /admin
+Disallow: /api/
+Disallow: /checkout/success
+
+# Sitemap location
+Sitemap: https://nutriticare.com/sitemap.xml
