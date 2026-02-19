@@ -1,25 +1,10 @@
 "use client"
 
-import { Metadata } from 'next'
 import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { BlogFilters } from "@/components/blog/blog-filters"
 import { BlogGrid } from "@/components/blog/blog-grid"
-
-// Metadata must be exported from a server component
-export const metadata: Metadata = {
-  title: 'Blog - NutritiCare | Health & Wellness Articles',
-  description: 'Read expert articles about natural health, herbal remedies, wellness tips, and nutrition. Learn how to support your body naturally with NutritiCare.',
-  keywords: ['health articles', 'wellness tips', 'herbal remedies', 'nutrition', 'natural health', 'lifestyle'],
-  openGraph: {
-    title: 'NutritiCare Health & Wellness Blog',
-    description: 'Expert articles about natural health, herbal remedies, and wellness.',
-    url: 'https://nutriticare.com/blog',
-    siteName: 'NutritiCare',
-    type: 'website',
-  },
-}
 
 export default function BlogPage() {
   const [category, setCategory] = useState<string>("All")

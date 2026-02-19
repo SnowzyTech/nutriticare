@@ -1,6 +1,5 @@
 "use client"
 
-import { Metadata } from 'next'
 import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
@@ -8,20 +7,6 @@ import { ProductFilters } from "@/components/shop/product-filters"
 import { ProductGrid } from "@/components/shop/product-grid"
 import { Search } from "lucide-react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
-
-// Metadata must be exported from a server component
-export const metadata: Metadata = {
-  title: 'Shop - NutritiCare | Premium Herbal Supplements',
-  description: 'Browse our collection of premium herbal supplements, wellness products, and natural remedies. Find products for weight loss, blood sugar balance, kidney health, prostate support, and more.',
-  keywords: ['herbal supplements', 'wellness products', 'natural remedies', 'health products', 'dietary supplements'],
-  openGraph: {
-    title: 'Shop NutritiCare Herbal Supplements',
-    description: 'Discover premium natural herbal supplements for your wellness journey.',
-    url: 'https://nutriticare.com/shop',
-    siteName: 'NutritiCare',
-    type: 'website',
-  },
-}
 
 export default function ShopPage() {
   const [categories, setCategories] = useState<string[]>([])
