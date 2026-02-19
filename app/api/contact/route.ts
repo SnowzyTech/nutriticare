@@ -27,8 +27,8 @@ export async function POST(request: NextRequest) {
     const validatedData = validationResult.data
 
     const response = await getResend().emails.send({
-      from: "onboarding@resend.dev",
-      to: "snowzytech@gmail.com",
+      from: "support@nutriticare.com",
+      to: "support@nutriticare.com",
       replyTo: validatedData.email,
       subject: `New Contact Form Submission: ${validatedData.subject}`,
       html: `
