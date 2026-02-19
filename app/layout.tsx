@@ -23,6 +23,12 @@ export const metadata: Metadata = {
     "natural wellness",
     "NutritiCare",
   ],
+
+
+   verification: {
+    google: 'XPGuAoGE8UxiLP0N1iUV0Yh9Iu5965K702ALUm9FpG0',
+  },
+
   authors: [{ name: "NutritiCare" }],
   openGraph: {
     title: "NutritiCare - Health & Wellness",
