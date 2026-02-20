@@ -177,7 +177,7 @@ export default function PrivacyPolicyPage() {
                     <strong>Email:</strong> support@nutriticare.com
                   </p>
                   <p>
-                    <strong>Phone:</strong> +234 (0) 123 456 7890
+                    <strong>Phone:</strong>09163447732
                   </p>
                   <p>
                     <strong>Address:</strong> Lagos, Nigeria

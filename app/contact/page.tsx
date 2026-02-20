@@ -168,7 +168,7 @@ export default function ContactPage() {
                   <div className="min-w-0">
                     <h3 className="font-semibold text-foreground mb-1">Our Address</h3>
                     <p className="text-muted-foreground text-sm sm:text-base break-words">
-                      123 Wellness Way, Healthville, CA 90210
+                      ite A32, Primatek Plaza, Idimu Road Egbeda Lagos State.
                     </p>
                   </div>
                 </div>
@@ -179,7 +179,7 @@ export default function ContactPage() {
                   </div>
                   <div className="min-w-0">
                     <h3 className="font-semibold text-foreground mb-1">Phone</h3>
-                    <p className="text-muted-foreground text-sm sm:text-base break-words">+1 (234) 567-890</p>
+                    <p className="text-muted-foreground text-sm sm:text-base break-words">09163447732</p>
                   </div>
                 </div>
 
